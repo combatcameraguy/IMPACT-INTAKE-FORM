@@ -7,7 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <!-- Firebase SDK -->
+    <!-- Firebase SDK Compat Scripts -->
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
     <style>
@@ -121,9 +121,9 @@
         </div>
     </div>
 
-    <!-- Official Impact Entertainment Group Logo (Directly Referenced) -->
+    <!-- Official Impact Entertainment Group Logo (Restored) -->
     <div class="logo-container">
-        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAC7gAAAfQCAYAAABSEhI6AAAACXBIWXMAAAsTAAALEwEAmpwYAAAG1mlUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4gPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iQWRvYmUgWE1QIENvcmUgOS4wLWMwMDAgNzkuMTcxYzI3ZmFiLCAyMDIyLzA4LzE2LTIyOjM1OjQxICAgICAgICAiPiA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnTAXcucyMiPiA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtbG5zOnN0RXZ0PSJodHRwOi8vbn$.png">
+        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAC7gAAAfQCAYAAABSEhI6AAAACXBIWXMAAAsTAAALEwEAmpwYAAAG1mlUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4gPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iQWRvYmUgWE1QIENvcmUgOS4wLWMwMDAgNzkuMTcxYzI3ZmFiLCAyMDIyLzA4LzE2LTIyOjM1OjQxICAgICAgICAiPiA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnTAXcucyMiPiA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtbG5zOnN0RXZ0PSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VFdmVudCMiIHhtbG5zOnhtcD0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wLyIgeG1sbnM6ZGM9Imh0dHA6Ly9wdXJsLm9yZy9kYy9lbGVtZW50cy8xLjEvIiB4bWxuczpwaG90b3Nob3A9Imh0dHA6Ly9ucy5hZG9iZS5jb20vcGhvdG9zaG9wLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo0ZDRhMWYwMC1lZmIxLTRmNGQtOGQ1NS1lOWIwYWJhYzM5ZmUiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6RDYyNDhERTI3QTUwMTFFQ0E5MDJGMzAxQzM5NDcxMTIiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6MGQyYTI5NjUtZDkxMi00YTQxLbVjMTEtNWJkNzgxNzkwZjJiIiB4bXA6Q3JlYXRvclRvb2w9IkFkb2JlIFBob3Rvc2hvcCAyMS4xIChNYWNpbnRoshgpIiB4bXA6Q3JlYXRlRGF0ZT0iMjAyMC0xMC0wOVQxNDozODozNi0wNzowMCIgeG1wOk1vZGlmeURhdGU9IjIwMjItMTItMTFUMTA6NTY6MTQtMDg6MDAiIHhtcDpNZXRhZGF0YURhdGU9IjIwMjItMTItMTFUMTA6NTY6MTQtMDg6MDAiIGRjpmb3JtYXQ9I2ltYWdlL3BuZyIgcGhvdG9zaG9wOkNvbG9yTW9kZT0iMyI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOjA=">
     </div>
 
     <p class="subtitle">CSP Program Intake Form & Application</p>
@@ -229,7 +229,7 @@
     `;
     document.head.appendChild(styleElem);
 
-    // Firebase Initialization matching the dashboard configuration[cite: 2]
+    // Firebase Config matched to Dashboard project
     const firebaseConfig = {
       apiKey: "AIzaSyCEAoWW1iGQJz9cNJINvONIDaidXLkxK8s",
       authDomain: "impact-datatrak.firebaseapp.com",
@@ -253,7 +253,7 @@
         
         const payload = {
             id: Date.now(),
-            group: 'group1', // Automatically populates right into the INBOX group on the dashboard[cite: 2]
+            group: 'group1', 
             pipelineStatus: 'Not started',
             timestamp: timestamp,
             fullName: formData.get('fullName') || '',
@@ -274,7 +274,6 @@
             availability: formData.get('availability') || ''
         };
 
-        // Push directly to Firebase Realtime Database so it instantly populates the IMPACT DataTrak dashboard[cite: 2]
         database.ref('userData/tasks').once('value', (snapshot) => {
             let existingTasks = snapshot.val() || [];
             if (!Array.isArray(existingTasks)) existingTasks = [];
