@@ -4,170 +4,167 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Impact Entertainment Group - CSP Program Intake</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <!-- Firebase SDK Compat Scripts -->
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
     <style>
-        body { 
-            font-family: 'Montserrat', sans-serif; 
-            background: linear-gradient(135deg, #3c3c3c 0%, #1f2937 100%); 
-            color: #3c3c3c;
-            padding: 20px; 
-            margin: 0; 
+        :root {
+            /* Brand Colors */
+            --impact-yellow: #f7b512; 
+            --impact-dark-grey: #3c3c3c;
+            --light-grey: #f4f4f9;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--light-grey);
+            color: var(--impact-dark-grey); /* Using requested Grey for text */
+            display: flex;
+            justify-content: center;
+            align-items: center;
             min-height: 100vh;
-        }
-        /* Version & Connection Status Header Styling */
-        .top-header-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: #1f2937;
-            padding: 10px 20px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            color: #ffffff;
-            font-size: 0.9em;
-            font-weight: 600;
-        }
-        .connection-status {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .status-light {
-            width: 10px;
-            height: 10px;
-            background-color: #10b981; /* Green for connected */
-            border-radius: 50%;
-            box-shadow: 0 0 8px #10b981;
+            margin: 0;
         }
 
-        /* Success Confirmation Banner */
-        .success-banner {
-            display: none;
-            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
-            border: 1px solid #c3e6cb;
-            color: #155724;
-            padding: 20px;
+        .container {
+            background: var(--white);
+            padding: 2.5rem;
             border-radius: 8px;
-            text-align: center;
-            font-weight: bold;
-            margin-bottom: 25px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-            animation: fadeIn 0.5s ease-out forwards;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .container { 
-            max-width: 800px; 
-            margin: 0 auto; 
-            background: #ffffff; 
-            padding: 40px; 
-            border-radius: 12px; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3); 
-            border-top: 6px solid #f7b512;
-        }
-        
-        .logo-container {
-            text-align: center;
-            margin-bottom: 25px;
-        }
-        .logo-container img {
-            max-width: 250px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
             width: 100%;
+            max-width: 700px;
+        }
+
+        /* Logo Styling */
+        .logo-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+        .logo-header img {
+            max-width: 200px;
             height: auto;
+            display: block;
+            margin: 0 auto;
         }
 
-        .subtitle { 
+        h2 { 
+            color: var(--impact-dark-grey); 
+            border-bottom: 3px solid var(--impact-yellow); /* Impact Yellow accent */
+            padding-bottom: 10px; 
+            display: inline-block;
+            margin-top: 0;
+        }
+
+        .form-section { margin-bottom: 25px; }
+        
+        label { 
+            display: block; 
+            margin-top: 15px; 
+            font-weight: bold; 
+            color: var(--impact-dark-grey); 
+        }
+
+        input, select, textarea { 
+            width: 100%; 
+            padding: 12px; 
+            margin-top: 6px; 
+            border: 1px solid #ccc; 
+            border-radius: 4px; 
+            box-sizing: border-box; 
+            font-size: 16px;
+        }
+
+        /* Button using Requested Yellow */
+        button {
+            background-color: var(--impact-yellow);
+            color: var(--impact-dark-grey);
+            padding: 15px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 18px;
+            width: 100%;
+            margin-top: 20px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover { 
+            opacity: 0.9; /* Slight darken effect */
+        }
+
+        .consent { 
+            font-size: 0.9em; 
+            color: var(--impact-dark-grey); 
+            display: flex; 
+            align-items: center; 
+            gap: 10px; 
+            margin-top: 25px;
+            background-color: #f9f9f9;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        .consent input { width: auto; margin: 0; transform: scale(1.2); }
+
+        #status-message { 
+            margin-top: 20px; 
             text-align: center; 
-            color: #3c3c3c; 
-            margin-bottom: 30px; 
-            font-size: 1.35em; 
-            font-weight: 800; 
-            letter-spacing: -0.3px;
+            font-weight: bold; 
+            display: none; 
         }
-        
-        fieldset { border: 1px solid #e5e7eb; padding: 24px; margin-bottom: 25px; border-radius: 8px; background-color: #fafafa; }
-        legend { font-weight: bold; color: #3c3c3c; padding: 0 10px; font-size: 1.1em; }
-        label { display: block; margin-top: 15px; font-weight: 600; color: #3c3c3c; font-size: 0.9em; }
-        input[type="text"], input[type="email"], input[type="tel"], input[type="date"], textarea, select { width: 100%; padding: 12px; margin-top: 6px; box-sizing: border-box; border: 1px solid #d1d5db; border-radius: 6px; font-size: 1em; font-family: 'Montserrat', sans-serif; transition: border-color 0.2s, box-shadow 0.2s; }
-        
-        input:focus, textarea:focus, select:focus {
-            outline: none;
-            border-color: #f7b512;
-            box-shadow: 0 0 0 3px rgba(247, 181, 18, 0.2);
-        }
-
-        .btn-submit { width: 100%; padding: 16px; background-color: #f7b512; color: #3c3c3c; border: none; border-radius: 6px; font-size: 1.1em; font-weight: 800; cursor: pointer; margin-top: 10px; transition: all 0.2s; box-shadow: 0 4px 12px rgba(247, 181, 18, 0.3); }
-        .btn-submit:hover { background-color: #e0a30e; transform: translateY(-1px); box-shadow: 0 6px 16px rgba(247, 181, 18, 0.4); }
-
-        #statusMsg { display: none; padding: 15px; margin-bottom: 20px; border-radius: 6px; text-align: center; font-weight: bold; }
     </style>
 </head>
 <body>
 
 <div class="container">
-
-    <div class="top-header-bar">
-        <span>v5.1</span>
-        <div class="connection-status">
-            <div class="status-light" id="connectionLight"></div>
-            <span id="connectionText">Connected</span>
-        </div>
+    <div class="logo-header">
+        <!-- Logo referencing your github file -->
+        <img src="impact-logo-vert-tag-color.png" alt="Impact Entertainment Group Logo">
+        <h3 style="margin-top: 10px; margin-bottom: 0; color: var(--impact-dark-grey);">Connected</h3>
     </div>
 
-    <!-- Official Impact Entertainment Group Logo (Clean Image Reference) -->
-    <div class="logo-container">
-        <img src="logo.png" alt="Impact Entertainment Group Logo">
-    </div>
+    <h2>CSP Program Intake Form & Application</h2>
 
-    <p class="subtitle">CSP Program Intake Form & Application</p>
-
-    <div id="statusMsg" class="success-banner"></div>
-
-    <form id="intakeForm" onsubmit="handleSubmit(event)">
+    <!-- ID added for JS binding -->
+    <form id="intake-form">
         
-        <fieldset>
-            <legend>Personal Information</legend>
-            <label>Full Name *</label>
-            <input type="text" name="fullName" required placeholder="e.g. John Doe">
+        <div class="form-section">
+            <h3 style="color: var(--impact-yellow); background: var(--impact-dark-grey); padding: 5px 10px; font-size: 1.1rem;">Personal Information</h3>
             
-            <label>Phone Number *</label>
-            <input type="tel" name="phone" required placeholder="e.g. (555) 000-0000">
+            <label for="fullName">Full Name *</label>
+            <input type="text" id="fullName" name="fullName" required placeholder="John Doe">
 
-            <label>Email Address *</label>
-            <input type="email" name="email" required placeholder="your.email@mil.com">
-            
-            <label>City, State (Duty Location) *</label>
-            <input type="text" name="location" required placeholder="e.g. Savannah, GA">
+            <label for="phone">Phone Number *</label>
+            <input type="tel" id="phone" name="phone" required placeholder="(555) 123-4567">
 
-            <label>Do you have reliable transportation? *</label>
-            <select name="transportation" required>
+            <label for="email">Email Address *</label>
+            <input type="email" id="email" name="email" required placeholder="john@example.com">
+
+            <label for="cityState">City, State (Duty Location) *</label>
+            <input type="text" id="cityState" name="cityState" required>
+
+            <label for="transport">Do you have reliable transportation? *</label>
+            <select id="transport" name="transport" required>
                 <option value="">Select option...</option>
                 <option value="Yes">Yes</option>
                 <option value="No">No</option>
             </select>
-        </fieldset>
+        </div>
 
-        <fieldset>
-            <legend>Military Background</legend>
-            
-            <label>What is your current status? *</label>
-            <select name="currentStatus" required>
+        <div class="form-section">
+            <h3 style="color: var(--impact-yellow); background: var(--impact-dark-grey); padding: 5px 10px; font-size: 1.1rem;">Military Background</h3>
+
+            <label for="mStatus">Current Status *</label>
+            <select id="mStatus" name="mStatus" required>
                 <option value="">Select status...</option>
                 <option value="Active Duty">Active Duty</option>
                 <option value="Transitioning Service Member">Transitioning Service Member</option>
                 <option value="Veteran">Veteran</option>
-                <option value="MilSpouse">Military Spouse</option>
+                <option value="Military Spouse">Military Spouse</option>
             </select>
 
-            <label>Branch of Service *</label>
-            <select name="branchOfService" required>
+            <label for="branch">Branch of Service *</label>
+            <select id="branch" name="branch" required>
                 <option value="">Select branch...</option>
                 <option value="Army">Army</option>
                 <option value="Navy">Navy</option>
@@ -177,125 +174,104 @@
                 <option value="Space Force">Space Force</option>
             </select>
 
-            <label>MOS / Job Specialty *</label>
-            <input type="text" name="mos" required placeholder="e.g. 11B Infantry, 68W Medic, Logistics, etc.">
+            <label for="mos">MOS / Job Specialty *</label>
+            <input type="text" id="mos" name="mos" required placeholder="e.g. 11X, IT Specialist">
 
-            <label>Pay Grade *</label>
-            <input type="text" name="payGrade" required placeholder="e.g. E4, E6, O3, etc.">
+            <label for="payGrade">Pay Grade *</label>
+            <input type="text" id="payGrade" name="payGrade" required placeholder="e.g. E-5, O-3">
 
-            <label>ETS / Retirement Date *</label>
-            <input type="date" name="etsDate" style="font-size: 1.1em; padding: 14px;" required>
+            <label for="etsDate">ETS / Retirement Date *</label>
+            <input type="date" id="etsDate" name="etsDate" required>
 
-            <label>Start of Terminal Leave Date (if known)</label>
-            <input type="date" name="terminalLeave" style="font-size: 1.1em; padding: 14px;">
-        </fieldset>
+            <label for="terminalLeave">Start of Terminal Leave Date (if known)</label>
+            <input type="date" id="terminalLeave" name="terminalLeave">
+        </div>
 
-        <fieldset>
-            <legend>Interests & Capabilities</legend>
-            
-            <label>Which opportunities with IMPACT are you interested in? *</label>
-            <input type="text" name="opportunities" required placeholder="e.g. Training, Film production, Employment">
+        <div class="form-section">
+            <h3 style="color: var(--impact-yellow); background: var(--impact-dark-grey); padding: 5px 10px; font-size: 1.1rem;">Interests & Capabilities</h3>
 
-            <label>Please list any skills, certifications, trades, or experience (military or civilian)</label>
-            <textarea name="skills" rows="3" placeholder="Examples: electrical, plumbing, leadership, logistics, medical, admin, construction, AV, IT, etc."></textarea>
+            <label for="opportunities">Which opportunities with IMPACT are you interested in? *</label>
+            <input type="text" id="opportunities" name="opportunities" required placeholder="e.g. Production, Post-Production, Training">
 
-            <label>Which areas are you MOST interested in working in?</label>
-            <input type="text" name="areasOfInterest" placeholder="e.g. Production, Operations, Technical Support">
+            <label for="skills">Skills, certifications, trades, or experience (military or civilian)</label>
+            <textarea id="skills" name="skills" rows="4" style="width:100%; padding:12px; margin-top:6px; border-radius: 4px;"></textarea>
 
-            <label>General availability or scheduling / physical limitations:</label>
-            <textarea name="availability" rows="2" placeholder="List any constraints or general availability..."></textarea>
-        </fieldset>
+            <label for="interestAreas">Which areas are you MOST interested in working in?</label>
+            <input type="text" id="interestAreas" name="interestAreas">
 
-        <fieldset>
-            <legend>Consent</legend>
-            <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; font-weight: normal;">
-                <input type="checkbox" name="agreeToContact" value="Yes" required style="width: 20px; height: 20px; accent-color: #f7b512;">
-                <span>I agree to be contacted by IMPACT Entertainment Group regarding training, film, and employment opportunities. *</span>
-            </label>
-        </fieldset>
+            <label for="availability">General availability or scheduling / physical limitations:</label>
+            <input type="text" id="availability" name="availability">
+        </div>
 
-        <button type="submit" class="btn-submit">Submit Application</button>
+        <div class="consent">
+            <input type="checkbox" id="consent" name="consent" required>
+            <label for="consent" style="margin:0; font-weight:normal;">I agree to be contacted by IMPACT Entertainment Group regarding training, film, and employment opportunities. *</label>
+        </div>
+
+        <button type="submit" id="submit-btn">Submit Application</button>
+        <p id="status-message"></p>
     </form>
 </div>
 
-<script>
-    const styleElem = document.createElement('style');
-    styleElem.innerHTML = `
-        input[type="date"]::-webkit-calendar-picker-indicator {
-            font-size: 1.8em;
-            cursor: pointer;
-            filter: invert(0.6) sepia(1) saturate(5) hue-rotate(5deg);
-        }
-    `;
-    document.head.appendChild(styleElem);
+<!-- FIREBASE INTEGRATION -->
+<script type="module">
+    // Import Firebase SDKs
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
-    // Firebase Configuration matching dashboard project
-    const firebaseConfig = {
-      apiKey: "AIzaSyCEAoWW1iGQJz9cNJINvONIDaidXLkxK8s",
-      authDomain: "impact-datatrak.firebaseapp.com",
-      projectId: "impact-datatrak",
-      storageBucket: "impact-datatrak.firebasestorage.app",
-      messagingSenderId: "489513066612",
-      appId: "1:489513066612:web:d8540498107aad77cff121",
-      databaseURL: "https://impact-datatrak-default-rtdb.firebaseio.com"
+    // YOUR FIREBASE CONFIGURATION (From your previous request)
+    const firebaseConfig = {  
+      apiKey: "AIzaSyCEAoWW1iGQJz9cNJINvONIDaidXLkxK8s",  
+      authDomain: "impact-datatrak.firebaseapp.com",  
+      projectId: "impact-datatrak",  
+      storageBucket: "impact-datatrak.firebasestorage.app",  
+      messagingSenderId: "489513066612",  
+      appId: "1:489513066612:web:d8540498107aad77cff121"  
     };
 
-    firebase.initializeApp(firebaseConfig);
-    const database = firebase.database();
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
 
-    function handleSubmit(e) {
-        e.preventDefault();
-        
-        const form = document.getElementById('intakeForm');
-        const formData = new FormData(form);
-        
-        const timestamp = new Date().toISOString().split('T')[0];
-        
-        const payload = {
-            id: Date.now(),
-            group: 'group1', 
-            pipelineStatus: 'Not started',
-            timestamp: timestamp,
-            fullName: formData.get('fullName') || '',
-            phone: formData.get('phone') || '',
-            email: formData.get('email') || '',
-            currentStatus: formData.get('currentStatus') || '',
-            branchOfService: formData.get('branchOfService') || 'Not started',
-            agreeToContact: formData.get('agreeToContact') ? 'Yes' : 'No',
-            mos: formData.get('mos') || '',
-            payGrade: formData.get('payGrade') || '',
-            etsDate: formData.get('etsDate') || '',
-            terminalLeave: formData.get('terminalLeave') || '',
-            location: formData.get('location') || '',
-            transportation: formData.get('transportation') || '',
-            opportunities: formData.get('opportunities') || '',
-            skills: formData.get('skills') || '',
-            areasOfInterest: formData.get('areasOfInterest') || '',
-            availability: formData.get('availability') || ''
-        };
+    // Form Handling Logic
+    const form = document.getElementById('intake-form');
+    const submitBtn = document.getElementById('submit-btn');
+    const statusMsg = document.getElementById('status-message');
 
-        database.ref('userData/tasks').once('value', (snapshot) => {
-            let existingTasks = snapshot.val() || [];
-            if (!Array.isArray(existingTasks)) existingTasks = [];
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault(); 
+        
+        // UI Updates during submission
+        submitBtn.textContent = "Processing...";
+        submitBtn.disabled = true;
+
+        try {
+            // Collect Data
+            const formData = new FormData(form);
+            const applicationData = Object.fromEntries(formData.entries());
+            applicationData.submittedAt = new Date();
+
+            // Save to Firestore (Populates Dashboard)
+            await addDoc(collection(db, "Impacts"), applicationData);
+
+            // Success Message (Using Impact Colors for visual consistency)
+            statusMsg.style.backgroundColor = "var(--impact-yellow)";
+            statusMsg.style.color = "var(--impact-dark-grey)";
+            statusMsg.textContent = "Application successfully sent to the IMPACT Dashboard!";
+            statusMsg.style.display = "block";
             
-            existingTasks.push(payload);
-
-            database.ref('userData/tasks').set(existingTasks)
-                .then(() => {
-                    const msgBox = document.getElementById('statusMsg');
-                    msgBox.style.display = 'block';
-                    msgBox.innerHTML = `
-                        <div style="font-size: 1.2em; margin-bottom: 5px;">Application Submitted Successfully!</div>
-                        <div style="font-weight: normal; font-size: 0.95em;">Thank you, ${payload.fullName}. Your intake form has been securely transmitted to the IMPACT DataTrak dashboard pipeline.</div>
-                    `;
-                    form.reset();
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                })
-                .catch((error) => {
-                    alert('Submission error: ' + error.message);
-                });
-        });
-    }
+            form.reset(); // Clear fields
+            
+        } catch (error) {
+            console.error("Error adding document: ", error);
+            statusMsg.style.color = "#d32f2f"; // Error Red
+            statusMsg.textContent = "Error submitting application. Please try again.";
+            statusMsg.style.display = "block";
+        } finally {
+            submitBtn.textContent = "Submit Application";
+            submitBtn.disabled = false;
+        }
+    });
 </script>
 
 </body>
