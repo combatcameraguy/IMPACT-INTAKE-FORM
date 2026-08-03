@@ -52,8 +52,6 @@
             box-shadow: 0 0 0 3px rgba(247, 181, 18, 0.2);
         }
 
-        .help-text { font-size: 0.8em; color: #6b7280; display: block; margin-top: 4px; font-style: italic; }
-
         .btn-submit { width: 100%; padding: 16px; background-color: #f7b512; color: #3c3c3c; border: none; border-radius: 6px; font-size: 1.1em; font-weight: 800; cursor: pointer; margin-top: 10px; transition: all 0.2s; box-shadow: 0 4px 12px rgba(247, 181, 18, 0.3); }
         .btn-submit:hover { background-color: #e0a30e; transform: translateY(-1px); box-shadow: 0 6px 16px rgba(247, 181, 18, 0.4); }
 
@@ -63,7 +61,6 @@
 <body>
 
 <div class="container">
-    <!-- Official Logo Added, Shield Removed -->
     <div class="logo-container">
         <img src="impact-logo-vert-tag-color.png" alt="Impact Entertainment Group Logo">
     </div>
@@ -127,10 +124,10 @@
             <input type="text" name="payGrade" required placeholder="e.g. E4, E6, O3, etc.">
 
             <label>ETS / Retirement Date *</label>
-            <input type="date" name="etsDate" required>
+            <input type="date" name="etsDate" style="font-size: 1.1em; padding: 14px;" required>
 
             <label>Start of Terminal Leave Date (if known)</label>
-            <input type="date" name="terminalLeave">
+            <input type="date" name="terminalLeave" style="font-size: 1.1em; padding: 14px;">
         </fieldset>
 
         <fieldset>
@@ -162,6 +159,17 @@
 </div>
 
 <script>
+    // Style native date pickers to be larger and match brand on supported browsers
+    const styleElem = document.createElement('style');
+    styleElem.innerHTML = `
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            font-size: 1.8em;
+            cursor: pointer;
+            filter: invert(0.6) sepia(1) saturate(5) hue-rotate(5deg);
+        }
+    `;
+    document.head.appendChild(styleElem);
+
     // FIREBASE CONFIGURATION (Matches your IMPACT DataTrak project)
     const firebaseConfig = {
       apiKey: "AIzaSyCEAoWW1iGQJz9cNJINvONIDaidXLkxK8s",
