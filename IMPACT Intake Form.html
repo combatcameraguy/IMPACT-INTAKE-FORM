@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IMPACT DataTrak - Intake Form</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+    <style>
+        body { font-family: 'Montserrat', sans-serif; background-color: #f4f7f6; padding: 20px; margin: 0; }
+        .container { max-width: 800px; margin: 0 auto; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        h1 { color: #1f2937; text-align: center; margin-bottom: 5px; font-weight: 800; }
+        .subtitle { text-align: center; color: #6b7280; margin-bottom: 30px; font-size: 0.95em; }
+        
+        fieldset { border: 1px solid #e0e0e0; padding: 20px; margin-bottom: 25px; border-radius: 8px; background-color: #fafafa; }
+        legend { font-weight: bold; color: #1f2937; padding: 0 10px; font-size: 1.1em; }
+        label { display: block; margin-top: 15px; font-weight: 600; color: #4b5563; font-size: 0.9em; }
+        input[type="text"], input[type="email"], input[type="tel"], input[type="date"], textarea, select { width: 100%; padding: 10px; margin-top: 5px; box-sizing: border-box; border: 1px solid #d1d5db; border-radius: 6px; font-size: 1em; font-family: 'Montserrat', sans-serif; }
+        .help-text { font-size: 0.8em; color: #6b7280; display: block; margin-top: 4px; font-style: italic; }
+
+        .options-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-top: 10px; }
+        .option-card { border: 2px solid #e5e7eb; padding: 12px; border-radius: 6px; cursor: pointer; transition: all 0.2s; text-align: center; background: white; font-size: 0.9em; font-weight: 600; color: #374151; display: flex; align-items: center; justify-content: center; }
+        .option-card:hover { border-color: #3b82f6; background-color: #eff6ff; }
+        .option-card input { margin-right: 8px; }
+        .option-card.active { border-color: #2563eb; background-color: #eff6ff; color: #1d4ed8; box-shadow: 0 0 5px rgba(37, 99, 235, 0.2); }
+        
+        .btn-submit { width: 100%; padding: 15px; background-color: #2563eb; color: white; border: none; border-radius: 6px; font-size: 1.1em; font-weight: 700; cursor: pointer; margin-top: 10px; transition: background 0.3s; }
+        .btn-submit:hover { background-color: #1d4ed8; }
+
+        #statusMsg { display: none; padding: 15px; margin-bottom: 20px; border-radius: 6px; text-align: center; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>🛡️ IMPACT DataTrak</h1>
+    <p class="subtitle">CSP Program Intake Form & Application</p>
+
+    <div id="statusMsg"></div>
+
+    <form id="intakeForm" onsubmit="handleSubmit(event)">
+        
+        <fieldset>
+            <legend>👤 Personal Information</legend>
+            <label>Full Name *</label>
+            <input type="text" name="fullName" required placeholder="e.g. John Doe">
+            
+            <label>Phone Number *</label>
+            <input type="tel" name="phone" required placeholder="e.g. (555) 000-0000">
+
+            <label>Email Address *</label>
+            <input type="email" name="email" required placeholder="your.email@mil.com">
+            
+            <label>City, State (Duty Location) *</label>
+            <input type="text" name="location" required placeholder="e.g. Savannah, GA">
+
+            <label>Do you have reliable transportation? *</label>
+            <select name="transportation" required>
+                <option value="">Select option...</option>
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+            </select>
+        </fieldset>
+
+        <fieldset>
+            <legend>🎖️ Military Background</legend>
+            
+            <label>What is your current status? *</label>
+            <select name="currentStatus" required>
+                <option value="">Select status...</option>
+                <option value="Active Duty">Active Duty</option>
+                <option value="Transitioning Service Member">Transitioning Service Member</option>
+                <option value="Veteran">Veteran</option>
+                <option value="MilSpouse">Military Spouse</option>
+            </select>
+
+            <label>Branch of Service *</label>
+            <select name="branchOfService" required>
+                <option value="">Select branch...</option>
+                <option value="Army">Army</option>
+                <option value="Navy">Navy</option>
+                <option value="Air Force">Air Force</option>
+                <option value="Marines">Marines</option>
+                <option value="Coast Guard">Coast Guard</option>
+                <option value="Space Force">Space Force</option>
+            </select>
+
+            <label>MOS / Job Specialty *</label>
+            <input type="text" name="mos" required placeholder="e.g. 11B Infantry, 68W Medic, Logistics, etc.">
+
+            <label>Pay Grade *</label>
+            <input type="text" name="payGrade" required placeholder="e.g. E4, E6, O3, etc.">
+
+            <label>ETS / Retirement Date *</label>
+            <input type="date" name="etsDate" required>
+
+            <label>Start of Terminal Leave Date (if known)</label>
+            <input type="date" name="terminalLeave">
+        </fieldset>
+
+        <fieldset>
+            <legend>🎯 Interests & Capabilities</legend>
+            
+            <label>Which opportunities with IMPACT are you interested in? *</label>
+            <input type="text" name="opportunities" required placeholder="e.g. Training, Film production, Employment">
+
+            <label>Please list any skills, certifications, trades, or experience (military or civilian)</label>
+            <textarea name="skills" rows="3" placeholder="Examples: electrical, plumbing, leadership, logistics, medical, admin, construction, AV, IT, etc."></textarea>
+
+            <label>Which areas are you MOST interested in working in?</label>
+            <input type="text" name="areasOfInterest" placeholder="e.g. Production, Operations, Technical Support">
+
+            <label>General availability or scheduling / physical limitations:</label>
+            <textarea name="availability" rows="2" placeholder="List any constraints or general availability..."></textarea>
+        </fieldset>
+
+        <fieldset>
+            <legend>🤝 Consent</legend>
+            <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; font-weight: normal;">
+                <input type="checkbox" name="agreeToContact" value="Yes" required style="width: 20px; height: 20px;">
+                <span>I agree to be contacted by IMPACT Entertainment Group regarding training, film, and employment opportunities. *</span>
+            </label>
+        </fieldset>
+
+        <button type="submit" class="btn-submit">🚀 Submit Application</button>
+    </form>
+</div>
+
+<script>
+    // FIREBASE CONFIGURATION (Matches your IMPACT DataTrak project)
+    const firebaseConfig = {
+      apiKey: "AIzaSyCEAoWW1iGQJz9cNJINvONIDaidXLkxK8s",
+      authDomain: "impact-datatrak.firebaseapp.com",
+      projectId: "impact-datatrak",
+      storageBucket: "impact-datatrak.firebasestorage.app",
+      messagingSenderId: "489513066612",
+      appId: "1:489513066612:web:d8540498107aad77cff121",
+      databaseURL: "https://impact-datatrak-default-rtdb.firebaseio.com"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+
+    function handleSubmit(e) {
+        e.preventDefault();
+        
+        const form = document.getElementById('intakeForm');
+        const formData = new FormData(form);
+        
+        const timestamp = new Date().toISOString().split('T')[0];
+        
+        // Map form fields directly to your dashboard column keys
+        const payload = {
+            id: Date.now(),
+            group: 'group1', // Automatically lands in INBOX on your dashboard
+            pipelineStatus: 'Not started',
+            timestamp: timestamp,
+            fullName: formData.get('fullName') || '',
+            phone: formData.get('phone') || '',
+            email: formData.get('email') || '',
+            currentStatus: formData.get('currentStatus') || '',
+            branchOfService: formData.get('branchOfService') || 'Not started',
+            agreeToContact: formData.get('agreeToContact') ? 'Yes' : 'No',
+            mos: formData.get('mos') || '',
+            payGrade: formData.get('payGrade') || '',
+            etsDate: formData.get('etsDate') || '',
+            terminalLeave: formData.get('terminalLeave') || '',
+            location: formData.get('location') || '',
+            transportation: formData.get('transportation') || '',
+            opportunities: formData.get('opportunities') || '',
+            skills: formData.get('skills') || '',
+            areasOfInterest: formData.get('areasOfInterest') || '',
+            availability: formData.get('availability') || ''
+        };
+
+        const msgBox = document.getElementById('statusMsg');
+        
+        // Push directly to Firebase Realtime Database under user's tasks
+        database.ref('userData/tasks').once('value', (snapshot) => {
+            let existingTasks = snapshot.val() || [];
+            if (!Array.isArray(existingTasks)) existingTasks = [];
+            
+            existingTasks.push(payload);
+
+            database.ref('userData/tasks').set(existingTasks)
+                .then(() => {
+                    msgBox.style.display = 'block';
+                    msgBox.style.backgroundColor = '#d4edda';
+                    msgBox.style.color = '#155724';
+                    msgBox.innerHTML = "🎉 Application Submitted Successfully!<br>Thank you. Your intake form has been securely transmitted to the IMPACT DataTrak dashboard.";
+                    form.reset();
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                })
+                .catch((error) => {
+                    alert('Submission error: ' + error.message);
+                });
+        });
+    }
+</script>
+
+</body>
+</html>
