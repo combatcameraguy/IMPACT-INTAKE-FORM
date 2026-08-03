@@ -150,7 +150,6 @@
 <!-- FIREBASE INTEGRATION -->
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    // IMPORT REALTIME DATABASE (Required for dashboard sync)
     import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
     const firebaseConfig = {  
@@ -163,10 +162,9 @@
     };
 
     const app = initializeApp(firebaseConfig);
-    // Initialize Realtime Database
     const db = getDatabase(app);
 
-    // Live Connection Status Indicator
+    // Update Connection Status UI
     const statusEl = document.getElementById('connectionStatus');
     const statusTextEl = document.getElementById('statusText');
     
@@ -196,55 +194,50 @@
         try {
             const formData = new FormData(form);
             
-            // Fetch current tasks to determine the next unique ID
-            const snapshot = await (async () => {
-                return await import("https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js").then(m => m.get(ref(db, 'userData/tasks')));
-            })();
+            // Map form names to the exact keys your Dashboard expects
+            const applicationData = Object.fromEntries(formData.entries());
             
-            let maxId = 0;
-            if (snapshot.exists()) {
-                snapshot.forEach(child => maxId = Math.max(maxId, Number(child.key)));
-            }
-            const newId = maxId + 1;
-
-            // Map form data to the exact structure expected by Dashboard.html
             const task = {
-                id: newId,
-                group: 'group1', // Always land in INBOX (group1)
-                branchOfService: document.getElementById('branch').value || 'Not started',
-                fullName: formData.get('fullName') || '',
-                phone: formData.get('phone') || '',
-                email: formData.get('email') || '',
-                currentStatus: formData.get('mStatus') || 'New Intake',
-                mos: formData.get('mos') || '',
-                payGrade: formData.get('payGrade') || '',
-                etsDate: formData.get('etsDate') || '',
-                terminalLeave: formData.get('terminalLeave') || '',
-                location: formData.get('cityState') || '',
-                transportation: formData.get('transport') || '',
-                opportunities: formData.get('opportunities') || '',
-                skills: formData.get('skills') || '',
-                areasOfInterest: formData.get('interestAreas') || '',
-                availability: formData.get('availability') || '',
-                agreeToContact: formData.get('consent') === 'on' ? 'Yes' : 'No',
-                timestamp: new Date().toISOString().split('T')[0]
+                id: Date.now(),
+                group: 'group1', 
+                timestamp: new Date().toISOString().split('T')[0],
+                
+                // Mapping specific fields to Dashboard requirements
+                fullName: applicationData.fullName || '',
+                branchOfService: applicationData.branch || 'Not started',
+                currentStatus: applicationData.mStatus || 'New Intake',
+                mos: applicationData.mos || '',
+                payGrade: applicationData.payGrade || '',
+                etsDate: applicationData.etsDate || '',
+                terminalLeave: applicationData.terminalLeave || '',
+                location: applicationData.cityState || '', 
+                transportation: applicationData.transport || '',
+                opportunities: applicationData.opportunities || '',
+                skills: applicationData.skills || '',
+                areasOfInterest: applicationData.interestAreas || '',
+                availability: applicationData.availability || '',
+                agreeToContact: applicationData.consent === 'on' ? 'Yes' : 'No',
             };
 
-            // Write to the Realtime Database (where Dashboard listens)
+            // Directly write to Realtime Database (avoiding read-permission errors)
             await push(ref(db, 'userData/tasks'), task);
 
             statusMessage.style.color = "#2e7d32";
             statusMessage.textContent = "Application successfully sent!";
             form.reset();
+
         } catch (error) {
-            console.error("Submission failed:", error);
-            statusMessage.style.color = "#d32f2f";
-            statusMessage.textContent = "Error submitting application! Please try again.";
-            submitBtn.disabled = false;
+            // --- CODE ADDED TO FIX ERRORS LATER ---
+            console.error("Error submitting application:", error); 
+            statusMessage.style.color = "#d32f2f"; 
+            statusMessage.textContent = `Submission Error: ${error.message}`;
+            
+            if(error.code === 'database/permission-denied') {
+                 alert("Database permissions are blocking this form. Please update your Firebase Realtime Database rules.");
+            }
         } finally {
+            submitBtn.disabled = false;
             submitBtn.textContent = "Submit Application";
         }
     });
 </script>
-</body>
-</html>
