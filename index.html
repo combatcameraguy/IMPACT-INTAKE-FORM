@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IMPACT DataTrak - Intake Form</title>
+    <title>Impact Entertainment Group - CSP Program Intake</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -31,15 +31,23 @@
         
         .logo-container {
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
         .logo-container img {
-            max-width: 220px;
+            max-width: 240px;
+            width: 100%;
             height: auto;
+            display: inline-block;
         }
 
-        h1 { color: #3c3c3c; text-align: center; margin-bottom: 5px; font-weight: 800; font-size: 2em; letter-spacing: -0.5px; }
-        .subtitle { text-align: center; color: #6b7280; margin-bottom: 30px; font-size: 0.95em; font-weight: 600; }
+        .subtitle { 
+            text-align: center; 
+            color: #3c3c3c; 
+            margin-bottom: 30px; 
+            font-size: 1.35em; 
+            font-weight: 800; 
+            letter-spacing: -0.3px;
+        }
         
         fieldset { border: 1px solid #e5e7eb; padding: 24px; margin-bottom: 25px; border-radius: 8px; background-color: #fafafa; }
         legend { font-weight: bold; color: #3c3c3c; padding: 0 10px; font-size: 1.1em; }
@@ -61,11 +69,12 @@
 <body>
 
 <div class="container">
+    <!-- Logo properly referenced -->
     <div class="logo-container">
-        <img src="impact-logo-vert-tag-color.png" alt="Impact Entertainment Group Logo">
+        <img src="impact-logo-vert-tag-color.png" alt="Impact Entertainment Group Logo" onerror="this.style.display='none'; document.getElementById('fallback-title').style.display='block';">
+        <h2 id="fallback-title" style="display:none; color: #3c3c3c; margin:0;">IMPACT ENTERTAINMENT GROUP</h2>
     </div>
 
-    <h1>IMPACT DataTrak</h1>
     <p class="subtitle">CSP Program Intake Form & Application</p>
 
     <div id="statusMsg"></div>
@@ -159,7 +168,6 @@
 </div>
 
 <script>
-    // Style native date pickers to be larger and match brand on supported browsers
     const styleElem = document.createElement('style');
     styleElem.innerHTML = `
         input[type="date"]::-webkit-calendar-picker-indicator {
@@ -170,7 +178,6 @@
     `;
     document.head.appendChild(styleElem);
 
-    // FIREBASE CONFIGURATION (Matches your IMPACT DataTrak project)
     const firebaseConfig = {
       apiKey: "AIzaSyCEAoWW1iGQJz9cNJINvONIDaidXLkxK8s",
       authDomain: "impact-datatrak.firebaseapp.com",
