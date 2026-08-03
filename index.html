@@ -11,25 +11,51 @@
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
     <style>
-        body { font-family: 'Montserrat', sans-serif; background-color: #f4f7f6; padding: 20px; margin: 0; }
-        .container { max-width: 800px; margin: 0 auto; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        h1 { color: #1f2937; text-align: center; margin-bottom: 5px; font-weight: 800; }
-        .subtitle { text-align: center; color: #6b7280; margin-bottom: 30px; font-size: 0.95em; }
+        body { 
+            font-family: 'Montserrat', sans-serif; 
+            background: linear-gradient(135deg, #3c3c3c 0%, #1f2937 100%); 
+            color: #3c3c3c;
+            padding: 20px; 
+            margin: 0; 
+            min-height: 100vh;
+        }
+        .container { 
+            max-width: 800px; 
+            margin: 0 auto; 
+            background: #ffffff; 
+            padding: 40px; 
+            border-radius: 12px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3); 
+            border-top: 6px solid #f7b512;
+        }
         
-        fieldset { border: 1px solid #e0e0e0; padding: 20px; margin-bottom: 25px; border-radius: 8px; background-color: #fafafa; }
-        legend { font-weight: bold; color: #1f2937; padding: 0 10px; font-size: 1.1em; }
-        label { display: block; margin-top: 15px; font-weight: 600; color: #4b5563; font-size: 0.9em; }
-        input[type="text"], input[type="email"], input[type="tel"], input[type="date"], textarea, select { width: 100%; padding: 10px; margin-top: 5px; box-sizing: border-box; border: 1px solid #d1d5db; border-radius: 6px; font-size: 1em; font-family: 'Montserrat', sans-serif; }
+        .logo-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .logo-container img {
+            max-width: 220px;
+            height: auto;
+        }
+
+        h1 { color: #3c3c3c; text-align: center; margin-bottom: 5px; font-weight: 800; font-size: 2em; letter-spacing: -0.5px; }
+        .subtitle { text-align: center; color: #6b7280; margin-bottom: 30px; font-size: 0.95em; font-weight: 600; }
+        
+        fieldset { border: 1px solid #e5e7eb; padding: 24px; margin-bottom: 25px; border-radius: 8px; background-color: #fafafa; }
+        legend { font-weight: bold; color: #3c3c3c; padding: 0 10px; font-size: 1.1em; }
+        label { display: block; margin-top: 15px; font-weight: 600; color: #3c3c3c; font-size: 0.9em; }
+        input[type="text"], input[type="email"], input[type="tel"], input[type="date"], textarea, select { width: 100%; padding: 12px; margin-top: 6px; box-sizing: border-box; border: 1px solid #d1d5db; border-radius: 6px; font-size: 1em; font-family: 'Montserrat', sans-serif; transition: border-color 0.2s, box-shadow 0.2s; }
+        
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #f7b512;
+            box-shadow: 0 0 0 3px rgba(247, 181, 18, 0.2);
+        }
+
         .help-text { font-size: 0.8em; color: #6b7280; display: block; margin-top: 4px; font-style: italic; }
 
-        .options-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-top: 10px; }
-        .option-card { border: 2px solid #e5e7eb; padding: 12px; border-radius: 6px; cursor: pointer; transition: all 0.2s; text-align: center; background: white; font-size: 0.9em; font-weight: 600; color: #374151; display: flex; align-items: center; justify-content: center; }
-        .option-card:hover { border-color: #3b82f6; background-color: #eff6ff; }
-        .option-card input { margin-right: 8px; }
-        .option-card.active { border-color: #2563eb; background-color: #eff6ff; color: #1d4ed8; box-shadow: 0 0 5px rgba(37, 99, 235, 0.2); }
-        
-        .btn-submit { width: 100%; padding: 15px; background-color: #2563eb; color: white; border: none; border-radius: 6px; font-size: 1.1em; font-weight: 700; cursor: pointer; margin-top: 10px; transition: background 0.3s; }
-        .btn-submit:hover { background-color: #1d4ed8; }
+        .btn-submit { width: 100%; padding: 16px; background-color: #f7b512; color: #3c3c3c; border: none; border-radius: 6px; font-size: 1.1em; font-weight: 800; cursor: pointer; margin-top: 10px; transition: all 0.2s; box-shadow: 0 4px 12px rgba(247, 181, 18, 0.3); }
+        .btn-submit:hover { background-color: #e0a30e; transform: translateY(-1px); box-shadow: 0 6px 16px rgba(247, 181, 18, 0.4); }
 
         #statusMsg { display: none; padding: 15px; margin-bottom: 20px; border-radius: 6px; text-align: center; font-weight: bold; }
     </style>
@@ -37,7 +63,12 @@
 <body>
 
 <div class="container">
-    <h1>🛡️ IMPACT DataTrak</h1>
+    <!-- Official Logo Added, Shield Removed -->
+    <div class="logo-container">
+        <img src="impact-logo-vert-tag-color.png" alt="Impact Entertainment Group Logo">
+    </div>
+
+    <h1>IMPACT DataTrak</h1>
     <p class="subtitle">CSP Program Intake Form & Application</p>
 
     <div id="statusMsg"></div>
@@ -121,7 +152,7 @@
         <fieldset>
             <legend>🤝 Consent</legend>
             <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; font-weight: normal;">
-                <input type="checkbox" name="agreeToContact" value="Yes" required style="width: 20px; height: 20px;">
+                <input type="checkbox" name="agreeToContact" value="Yes" required style="width: 20px; height: 20px; accent-color: #f7b512;">
                 <span>I agree to be contacted by IMPACT Entertainment Group regarding training, film, and employment opportunities. *</span>
             </label>
         </fieldset>
@@ -153,10 +184,9 @@
         
         const timestamp = new Date().toISOString().split('T')[0];
         
-        // Map form fields directly to your dashboard column keys
         const payload = {
             id: Date.now(),
-            group: 'group1', // Automatically lands in INBOX on your dashboard
+            group: 'group1', 
             pipelineStatus: 'Not started',
             timestamp: timestamp,
             fullName: formData.get('fullName') || '',
@@ -179,7 +209,6 @@
 
         const msgBox = document.getElementById('statusMsg');
         
-        // Push directly to Firebase Realtime Database under user's tasks
         database.ref('userData/tasks').once('value', (snapshot) => {
             let existingTasks = snapshot.val() || [];
             if (!Array.isArray(existingTasks)) existingTasks = [];
