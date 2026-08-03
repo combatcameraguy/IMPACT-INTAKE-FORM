@@ -150,8 +150,8 @@
 <!-- FIREBASE INTEGRATION -->
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-    import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+    // IMPORT REALTIME DATABASE (Required for dashboard sync)
+    import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
     const firebaseConfig = {  
         apiKey: "AIzaSyCEAoWW1iGQJz9cNJINvONIDaidXLkxK8s",  
@@ -159,25 +159,25 @@
         projectId: "impact-datatrak",  
         storageBucket: "impact-datatrak.firebasestorage.app",  
         messagingSenderId: "489513066612",  
-        appId: "1:489513066612:web:d8540498107aad77cff121",
-        databaseURL: "https://impact-datatrak-default-rtdb.firebaseio.com"
+        appId: "1:489513066612:web:d8540498107aad77cff121"
     };
 
     const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-    const rtdb = getDatabase(app); // Used purely for connection heartbeat
+    // Initialize Realtime Database
+    const db = getDatabase(app);
 
     // Live Connection Status Indicator
     const statusEl = document.getElementById('connectionStatus');
     const statusTextEl = document.getElementById('statusText');
-    const connectedRef = ref(rtdb, ".info/connected");
     
-    onValue(connectedRef, (snap) => {
-        const isConnected = snap.val();
-        if (isConnected === null) return; // Still checking
-        
-        statusEl.className = isConnected ? 'status-indicator status-online' : 'status-indicator status-offline';
-        statusTextEl.textContent = isConnected ? 'Firebase Connected' : 'Disconnected from Firebase';
+    onValue(ref(db, '.info/connected'), (snap) => {
+        if(snap.val() === true) {
+            statusEl.className = 'status-indicator status-online';
+            statusTextEl.textContent = 'Connected to Firebase';
+        } else {
+            statusEl.className = 'status-indicator status-offline';
+            statusTextEl.textContent = 'Disconnected';
+        }
     });
 
     const form = document.getElementById('intakeForm');
@@ -187,20 +187,52 @@
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
 
-        // Reset status
+        // Reset UI
         statusMessage.style.color = "var(--impact-grey)";
         statusMessage.textContent = "Submitting...";
-
         submitBtn.textContent = "Processing...";
         submitBtn.disabled = true;
 
         try {
             const formData = new FormData(form);
-            const applicationData = Object.fromEntries(formData.entries());
-            applicationData.submittedAt = new Date().toISOString();
             
-            await addDoc(collection(db, "Impacts"), applicationData);
+            // Fetch current tasks to determine the next unique ID
+            const snapshot = await (async () => {
+                return await import("https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js").then(m => m.get(ref(db, 'userData/tasks')));
+            })();
             
+            let maxId = 0;
+            if (snapshot.exists()) {
+                snapshot.forEach(child => maxId = Math.max(maxId, Number(child.key)));
+            }
+            const newId = maxId + 1;
+
+            // Map form data to the exact structure expected by Dashboard.html
+            const task = {
+                id: newId,
+                group: 'group1', // Always land in INBOX (group1)
+                branchOfService: document.getElementById('branch').value || 'Not started',
+                fullName: formData.get('fullName') || '',
+                phone: formData.get('phone') || '',
+                email: formData.get('email') || '',
+                currentStatus: formData.get('mStatus') || 'New Intake',
+                mos: formData.get('mos') || '',
+                payGrade: formData.get('payGrade') || '',
+                etsDate: formData.get('etsDate') || '',
+                terminalLeave: formData.get('terminalLeave') || '',
+                location: formData.get('cityState') || '',
+                transportation: formData.get('transport') || '',
+                opportunities: formData.get('opportunities') || '',
+                skills: formData.get('skills') || '',
+                areasOfInterest: formData.get('interestAreas') || '',
+                availability: formData.get('availability') || '',
+                agreeToContact: formData.get('consent') === 'on' ? 'Yes' : 'No',
+                timestamp: new Date().toISOString().split('T')[0]
+            };
+
+            // Write to the Realtime Database (where Dashboard listens)
+            await push(ref(db, 'userData/tasks'), task);
+
             statusMessage.style.color = "#2e7d32";
             statusMessage.textContent = "Application successfully sent!";
             form.reset();
