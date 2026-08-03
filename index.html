@@ -33,12 +33,6 @@
             text-align: center;
             margin-bottom: 25px;
         }
-        .logo-container img {
-            max-width: 240px;
-            width: 100%;
-            height: auto;
-            display: inline-block;
-        }
 
         .subtitle { 
             text-align: center; 
@@ -69,10 +63,20 @@
 <body>
 
 <div class="container">
-    <!-- Logo properly referenced -->
+    <!-- Embedded Official Impact Entertainment Group Logo (Vector Graphic) -->
     <div class="logo-container">
-        <img src="impact-logo-vert-tag-color.png" alt="Impact Entertainment Group Logo" onerror="this.style.display='none'; document.getElementById('fallback-title').style.display='block';">
-        <h2 id="fallback-title" style="display:none; color: #3c3c3c; margin:0;">IMPACT ENTERTAINMENT GROUP</h2>
+        <svg viewBox="0 0 500 160" width="260px" height="auto" xmlns="http://www.w3.org/2000/svg">
+            <!-- Icon Symbol / Waves -->
+            <g transform="translate(195, 0)">
+                <circle cx="55" cy="55" r="48" fill="none" stroke="#f7b512" stroke-width="14" stroke-dasharray="270 60" stroke-linecap="round"/>
+                <path d="M 28 65 A 35 35 0 0 1 82 65" fill="none" stroke="#f7b512" stroke-width="12" stroke-linecap="round"/>
+                <path d="M 38 78 A 20 20 0 0 1 72 78" fill="none" stroke="#f7b512" stroke-width="10" stroke-linecap="round"/>
+            </g>
+            <!-- IMPACT TEXT -->
+            <text x="250" y="132" font-family="'Montserrat', sans-serif" font-weight="800" font-size="52" fill="#3c3c3c" text-anchor="middle" letter-spacing="3">IMPACT</text>
+            <!-- ENTERTAINMENT GROUP TEXT -->
+            <text x="250" y="152" font-family="'Montserrat', sans-serif" font-weight="700" font-size="13.5" fill="#3c3c3c" text-anchor="middle" letter-spacing="4.5">ENTERTAINMENT GROUP ®</text>
+        </svg>
     </div>
 
     <p class="subtitle">CSP Program Intake Form & Application</p>
