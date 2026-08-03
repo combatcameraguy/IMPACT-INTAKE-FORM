@@ -3,20 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Impact Entertainment Group - CSP Program Intake</title>
+    <title>Impact DataTrak - Intake</title>
     <style>
+        /* Brand Colors */
         :root {
-            /* Brand Colors */
-            --impact-yellow: #f7b512; 
-            --impact-dark-grey: #3c3c3c;
-            --light-grey: #f4f4f9;
-            --white: #ffffff;
+            --impact-yellow: #f7b512;
+            --impact-grey: #3c3c3c;
         }
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--light-grey);
-            color: var(--impact-dark-grey); /* Using requested Grey for text */
+            background-color: #f4f4f9;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -25,45 +22,41 @@
         }
 
         .container {
-            background: var(--white);
-            padding: 2.5rem;
+            background: white;
+            padding: 2rem;
             border-radius: 8px;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
             width: 100%;
             max-width: 700px;
         }
 
-        /* Logo Styling */
         .logo-header {
             text-align: center;
             margin-bottom: 2rem;
-            padding-bottom: 1rem;
-            border-bottom: 1px solid #eee;
         }
         .logo-header img {
             max-width: 200px;
             height: auto;
-            display: block;
-            margin: 0 auto;
         }
 
         h2 { 
-            color: var(--impact-dark-grey); 
-            border-bottom: 3px solid var(--impact-yellow); /* Impact Yellow accent */
+            color: var(--impact-grey); 
+            border-bottom: 3px solid var(--impact-yellow); 
             padding-bottom: 10px; 
-            display: inline-block;
             margin-top: 0;
         }
 
-        .form-section { margin-bottom: 25px; }
-        
-        label { 
-            display: block; 
-            margin-top: 15px; 
-            font-weight: bold; 
-            color: var(--impact-dark-grey); 
+        .form-section { margin-bottom: 2rem; }
+        .section-title { 
+            background-color: var(--impact-grey); 
+            color: var(--impact-yellow); 
+            padding: 5px 10px; 
+            font-size: 1.1rem; 
+            margin-bottom: 15px;
         }
 
+        label { display: block; margin-top: 15px; font-weight: bold; color: #444; }
+        
         input, select, textarea { 
             width: 100%; 
             padding: 12px; 
@@ -71,13 +64,11 @@
             border: 1px solid #ccc; 
             border-radius: 4px; 
             box-sizing: border-box; 
-            font-size: 16px;
         }
 
-        /* Button using Requested Yellow */
         button {
             background-color: var(--impact-yellow);
-            color: var(--impact-dark-grey);
+            color: var(--impact-grey);
             padding: 15px 20px;
             border: none;
             border-radius: 4px;
@@ -86,59 +77,48 @@
             width: 100%;
             margin-top: 20px;
             font-weight: bold;
-            transition: background-color 0.3s ease;
         }
 
-        button:hover { 
-            opacity: 0.9; /* Slight darken effect */
-        }
+        button:hover { opacity: 0.9; }
 
-        .consent { 
-            font-size: 0.9em; 
-            color: var(--impact-dark-grey); 
+        .consent-box { 
+            background-color: #f9f9f9; 
+            padding: 15px; 
+            border-radius: 4px; 
+            margin-top: 20px; 
             display: flex; 
             align-items: center; 
-            gap: 10px; 
-            margin-top: 25px;
-            background-color: #f9f9f9;
-            padding: 10px;
-            border-radius: 4px;
+            gap: 10px;
         }
-        .consent input { width: auto; margin: 0; transform: scale(1.2); }
 
-        #status-message { 
-            margin-top: 20px; 
-            text-align: center; 
-            font-weight: bold; 
-            display: none; 
-        }
+        #statusMessage { margin-top: 15px; text-align: center; font-weight: bold; }
     </style>
 </head>
 <body>
 
 <div class="container">
     <div class="logo-header">
-        <!-- Logo referencing your github file -->
+        <!-- Reference to uploaded GitHub image -->
         <img src="impact-logo-vert-tag-color.png" alt="Impact Entertainment Group Logo">
-        <h3 style="margin-top: 10px; margin-bottom: 0; color: var(--impact-dark-grey);">Connected</h3>
+        <h3>Connected</h3>
     </div>
 
+    <!-- CSP Program Intake Form [1] -->
     <h2>CSP Program Intake Form & Application</h2>
 
-    <!-- ID added for JS binding -->
-    <form id="intake-form">
+    <form id="intakeForm">
         
         <div class="form-section">
-            <h3 style="color: var(--impact-yellow); background: var(--impact-dark-grey); padding: 5px 10px; font-size: 1.1rem;">Personal Information</h3>
+            <div class="section-title">Personal Information</div>
             
             <label for="fullName">Full Name *</label>
-            <input type="text" id="fullName" name="fullName" required placeholder="John Doe">
+            <input type="text" id="fullName" name="fullName" required>
 
             <label for="phone">Phone Number *</label>
-            <input type="tel" id="phone" name="phone" required placeholder="(555) 123-4567">
+            <input type="tel" id="phone" name="phone" required>
 
             <label for="email">Email Address *</label>
-            <input type="email" id="email" name="email" required placeholder="john@example.com">
+            <input type="email" id="email" name="email" required>
 
             <label for="cityState">City, State (Duty Location) *</label>
             <input type="text" id="cityState" name="cityState" required>
@@ -152,9 +132,9 @@
         </div>
 
         <div class="form-section">
-            <h3 style="color: var(--impact-yellow); background: var(--impact-dark-grey); padding: 5px 10px; font-size: 1.1rem;">Military Background</h3>
+            <div class="section-title">Military Background</div>
 
-            <label for="mStatus">Current Status *</label>
+            <label for="mStatus">What is your current status? *</label>
             <select id="mStatus" name="mStatus" required>
                 <option value="">Select status...</option>
                 <option value="Active Duty">Active Duty</option>
@@ -175,10 +155,10 @@
             </select>
 
             <label for="mos">MOS / Job Specialty *</label>
-            <input type="text" id="mos" name="mos" required placeholder="e.g. 11X, IT Specialist">
+            <input type="text" id="mos" name="mos" required>
 
             <label for="payGrade">Pay Grade *</label>
-            <input type="text" id="payGrade" name="payGrade" required placeholder="e.g. E-5, O-3">
+            <input type="text" id="payGrade" name="payGrade" required>
 
             <label for="etsDate">ETS / Retirement Date *</label>
             <input type="date" id="etsDate" name="etsDate" required>
@@ -188,13 +168,13 @@
         </div>
 
         <div class="form-section">
-            <h3 style="color: var(--impact-yellow); background: var(--impact-dark-grey); padding: 5px 10px; font-size: 1.1rem;">Interests & Capabilities</h3>
+            <div class="section-title">Interests & Capabilities</div>
 
             <label for="opportunities">Which opportunities with IMPACT are you interested in? *</label>
-            <input type="text" id="opportunities" name="opportunities" required placeholder="e.g. Production, Post-Production, Training">
+            <input type="text" id="opportunities" name="opportunities" required>
 
-            <label for="skills">Skills, certifications, trades, or experience (military or civilian)</label>
-            <textarea id="skills" name="skills" rows="4" style="width:100%; padding:12px; margin-top:6px; border-radius: 4px;"></textarea>
+            <label for="skills">Please list any skills, certifications, trades, or experience (military or civilian)</label>
+            <textarea id="skills" name="skills" rows="4"></textarea>
 
             <label for="interestAreas">Which areas are you MOST interested in working in?</label>
             <input type="text" id="interestAreas" name="interestAreas">
@@ -203,23 +183,22 @@
             <input type="text" id="availability" name="availability">
         </div>
 
-        <div class="consent">
+        <div class="consent-box">
             <input type="checkbox" id="consent" name="consent" required>
             <label for="consent" style="margin:0; font-weight:normal;">I agree to be contacted by IMPACT Entertainment Group regarding training, film, and employment opportunities. *</label>
         </div>
 
-        <button type="submit" id="submit-btn">Submit Application</button>
-        <p id="status-message"></p>
+        <button type="submit" id="submitBtn">Submit Application</button>
+        <p id="statusMessage"></p>
     </form>
 </div>
 
 <!-- FIREBASE INTEGRATION -->
 <script type="module">
-    // Import Firebase SDKs
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
     import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
-    // YOUR FIREBASE CONFIGURATION (From your previous request)
+    // Impact DataTrak Project Configuration
     const firebaseConfig = {  
       apiKey: "AIzaSyCEAoWW1iGQJz9cNJINvONIDaidXLkxK8s",  
       authDomain: "impact-datatrak.firebaseapp.com",  
@@ -233,16 +212,15 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    // Form Handling Logic
-    const form = document.getElementById('intake-form');
-    const submitBtn = document.getElementById('submit-btn');
-    const statusMsg = document.getElementById('status-message');
+    // Handle Form Submission
+    const form = document.getElementById('intakeForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const statusMessage = document.getElementById('statusMessage');
 
     form.addEventListener('submit', async (e) => {
-        e.preventDefault(); 
+        e.preventDefault();
         
-        // UI Updates during submission
-        submitBtn.textContent = "Processing...";
+        submitBtn.textContent = "Submitting...";
         submitBtn.disabled = true;
 
         try {
@@ -251,22 +229,19 @@
             const applicationData = Object.fromEntries(formData.entries());
             applicationData.submittedAt = new Date();
 
-            // Save to Firestore (Populates Dashboard)
+            // Save to Firestore Collection 'Impacts'
             await addDoc(collection(db, "Impacts"), applicationData);
 
-            // Success Message (Using Impact Colors for visual consistency)
-            statusMsg.style.backgroundColor = "var(--impact-yellow)";
-            statusMsg.style.color = "var(--impact-dark-grey)";
-            statusMsg.textContent = "Application successfully sent to the IMPACT Dashboard!";
-            statusMsg.style.display = "block";
+            // Success Message
+            statusMessage.style.color = "green";
+            statusMessage.textContent = "Application successfully sent to the Impact DataTrak Dashboard!";
             
-            form.reset(); // Clear fields
-            
+            form.reset();
+
         } catch (error) {
             console.error("Error adding document: ", error);
-            statusMsg.style.color = "#d32f2f"; // Error Red
-            statusMsg.textContent = "Error submitting application. Please try again.";
-            statusMsg.style.display = "block";
+            statusMessage.style.color = "red";
+            statusMessage.textContent = "Error submitting application. Please try again.";
         } finally {
             submitBtn.textContent = "Submit Application";
             submitBtn.disabled = false;
