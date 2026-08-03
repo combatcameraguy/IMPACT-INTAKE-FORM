@@ -150,7 +150,7 @@
 <!-- FIREBASE INTEGRATION -->
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+    import { getDatabase, ref, onValue, get, set } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
     const firebaseConfig = {  
         apiKey: "AIzaSyCEAoWW1iGQJz9cNJINvONIDaidXLkxK8s",  
@@ -158,24 +158,26 @@
         projectId: "impact-datatrak",  
         storageBucket: "impact-datatrak.firebasestorage.app",  
         messagingSenderId: "489513066612",  
-        appId: "1:489513066612:web:d8540498107aad77cff121"
+        appId: "1:489513066612:web:d8540498107aad77cff121",
+        databaseURL: "https://impact-datatrak-default-rtdb.firebaseio.com"
     };
 
+    // Initialize exactly one Firebase connection
     const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
+    const rtdb = getDatabase(app);
 
-    // Update Connection Status UI
+    // Two-Way Connection Status Indicator
+    // .info/connected only returns true when the client is actively sending and listening
     const statusEl = document.getElementById('connectionStatus');
     const statusTextEl = document.getElementById('statusText');
+    const connectedRef = ref(rtdb, ".info/connected");
     
-    onValue(ref(db, '.info/connected'), (snap) => {
-        if(snap.val() === true) {
-            statusEl.className = 'status-indicator status-online';
-            statusTextEl.textContent = 'Connected to Firebase';
-        } else {
-            statusEl.className = 'status-indicator status-offline';
-            statusTextEl.textContent = 'Disconnected';
-        }
+    onValue(connectedRef, (snap) => {
+        const isConnected = snap.val();
+        if (isConnected === null) return;
+        
+        statusEl.className = isConnected ? 'status-indicator status-online' : 'status-indicator status-offline';
+        statusTextEl.textContent = isConnected ? 'Firebase Connected' : 'Disconnected from Firebase';
     });
 
     const form = document.getElementById('intakeForm');
@@ -185,7 +187,6 @@
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
 
-        // Reset UI
         statusMessage.style.color = "var(--impact-grey)";
         statusMessage.textContent = "Submitting...";
         submitBtn.textContent = "Processing...";
@@ -193,48 +194,56 @@
 
         try {
             const formData = new FormData(form);
+            const rawData = Object.fromEntries(formData.entries());
             
-            // Map form names to the exact keys your Dashboard expects
-            const applicationData = Object.fromEntries(formData.entries());
-            
-            const task = {
-                id: Date.now(),
-                group: 'group1', 
+            // Format the data exactly how your React Dashboard expects it
+            const newTask = {
+                id: Date.now(), 
+                group: 'group1', // Drops it directly into the "INBOX" column
                 timestamp: new Date().toISOString().split('T')[0],
-                
-                // Mapping specific fields to Dashboard requirements
-                fullName: applicationData.fullName || '',
-                branchOfService: applicationData.branch || 'Not started',
-                currentStatus: applicationData.mStatus || 'New Intake',
-                mos: applicationData.mos || '',
-                payGrade: applicationData.payGrade || '',
-                etsDate: applicationData.etsDate || '',
-                terminalLeave: applicationData.terminalLeave || '',
-                location: applicationData.cityState || '', 
-                transportation: applicationData.transport || '',
-                opportunities: applicationData.opportunities || '',
-                skills: applicationData.skills || '',
-                areasOfInterest: applicationData.interestAreas || '',
-                availability: applicationData.availability || '',
-                agreeToContact: applicationData.consent === 'on' ? 'Yes' : 'No',
+                fullName: rawData.fullName || '',
+                phone: rawData.phone || '',
+                email: rawData.email || '',
+                currentStatus: rawData.mStatus || '',
+                branchOfService: rawData.branch || 'Not started',
+                agreeToContact: rawData.consent ? 'Yes' : 'No',
+                mos: rawData.mos || '',
+                payGrade: rawData.payGrade || '',
+                etsDate: rawData.etsDate || '',
+                terminalLeave: rawData.terminalLeave || '',
+                location: rawData.cityState || '',
+                transportation: rawData.transport || '',
+                opportunities: rawData.opportunities || '',
+                skills: rawData.skills || '',
+                areasOfInterest: rawData.interestAreas || '',
+                availability: rawData.availability || '',
+                pipelineStatus: 'New'
             };
 
-            // Directly write to Realtime Database (avoiding read-permission errors)
-            await push(ref(db, 'userData/tasks'), task);
+            // Grab the existing array of tasks from the Realtime Database
+            const tasksRef = ref(rtdb, 'userData/tasks');
+            const snapshot = await get(tasksRef);
+            let tasks = snapshot.val() || [];
 
+            // Ensure we are working with an array
+            if (!Array.isArray(tasks)) {
+                tasks = Object.values(tasks);
+            }
+
+            // Assign the next sequential ID
+            newTask.id = Math.max(...(tasks.length ? tasks.map(t => t.id || 0) : [0]), 0) + 1;
+            
+            // Append the new intake and push back to the database
+            tasks.push(newTask);
+            await set(tasksRef, tasks);
+            
             statusMessage.style.color = "#2e7d32";
             statusMessage.textContent = "Application successfully sent!";
             form.reset();
-
         } catch (error) {
-            // --- CODE ADDED TO FIX ERRORS LATER ---
-            console.error("Error submitting application:", error); 
-            statusMessage.style.color = "#d32f2f"; 
-            statusMessage.textContent = `Submission Error: ${error.message}`;
-            
-            if(error.code === 'database/permission-denied') {
-                 alert("Database permissions are blocking this form. Please update your Firebase Realtime Database rules.");
-            }
+            console.error("Submission failed:", error);
+            statusMessage.style.color = "#d32f2f";
+            statusMessage.textContent = "Error submitting application! Please try again.";
         } finally {
             submitBtn.disabled = false;
             submitBtn.textContent = "Submit Application";
