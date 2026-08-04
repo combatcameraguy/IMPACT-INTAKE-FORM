@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Impact Apply- Intake</title>
+    
+    <!-- Flatpickr CSS for Custom Desktop Calendar -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    
     <style>
         :root {
             --impact-yellow: #f7b512;
@@ -37,11 +41,38 @@
         }
         label { display: block; margin-top: 10px; font-weight: bold; color: #444; cursor: pointer; }
 
+        /* UNIFORM INPUT HEIGHTS */
         input[type="text"], input[type="email"], input[type="tel"],
         input[type="date"], select, textarea {
-            width: 100%; padding: 12px; margin-top: 5px; border: 1px solid #ccc;
-            border-radius: 4px; box-sizing: border-box;
+            width: 100%; 
+            padding: 12px; 
+            margin-top: 5px; 
+            border: 1px solid #ccc;
+            border-radius: 4px; 
+            box-sizing: border-box;
+            font-family: inherit;
+            font-size: 16px;
+            height: 48px; /* Forces all fields to be the exact same height */
         }
+        
+        textarea {
+            height: auto; /* Exclude textareas from the strict height */
+        }
+
+        /* FIX SQUISHED SELECT MENUS ON PC */
+        select {
+            appearance: none;
+            -webkit-appearance: none;
+            background-color: #fff;
+            /* Custom dropdown arrow to replace the ugly Windows one */
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23444' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 16px;
+            padding-right: 40px !important; 
+            cursor: pointer;
+        }
+
         button {
             background-color: var(--impact-yellow); color: var(--impact-grey);
             padding: 15px 20px; border: none; border-radius: 4px; cursor: pointer;
@@ -56,41 +87,38 @@
             gap: 15px;
             margin-top: 25px; 
             padding: 15px;
-            background-color: #f8f9fa; /* Subtle background to make it pop */
+            background-color: #f8f9fa;
             border: 1px solid #e0e0e0;
             border-radius: 8px;
         }
 
-        /* Hide default checkbox and style a custom one */
         .consent-row input[type="checkbox"] {
             appearance: none;
             -webkit-appearance: none;
             background-color: #fff;
             margin: 0;
             font: inherit;
-            width: 28px; /* Large, tap-friendly size */
+            width: 28px;
             height: 28px;
             border: 2px solid #ccc;
             border-radius: 6px;
             display: grid;
             place-content: center;
             cursor: pointer;
-            flex-shrink: 0; /* Prevents the box from squishing */
+            flex-shrink: 0;
             transition: all 0.2s ease-in-out;
         }
 
-        /* Custom Checkmark using SVG clip-path */
         .consent-row input[type="checkbox"]::before {
             content: "";
             width: 16px;
             height: 16px;
             transform: scale(0);
             transition: 120ms transform ease-in-out;
-            background-color: var(--impact-grey); /* Dark grey checkmark */
+            background-color: var(--impact-grey);
             clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
         }
 
-        /* Checked State Styles */
         .consent-row input[type="checkbox"]:checked {
             background-color: var(--impact-yellow);
             border-color: var(--impact-yellow);
@@ -100,12 +128,11 @@
             transform: scale(1);
         }
 
-        /* Consent Label Adjustments */
         .consent-row label {
             font-weight: normal; 
             color: #444; 
             cursor: pointer; 
-            margin-top: 2px; /* Perfectly aligns text with the box */
+            margin-top: 2px;
             line-height: 1.5;
         }
         
@@ -120,13 +147,28 @@
         .status-offline .status-dot { background-color: #ef4444; }
         
         @keyframes pulse { 0% { opacity: 0.4; } 50% { opacity: 1; } 100% { opacity: 0.4; } }
+
+        /* CUSTOM DESKTOP CALENDAR OVERRIDES (Applies to PC only) */
+        @media (min-width: 768px) {
+            .flatpickr-calendar.open {
+                transform: scale(1.4); /* Makes the calendar 40% larger */
+                transform-origin: top center;
+                margin-top: 10px;
+                /* 2-Second Opening Animation */
+                animation: slowFadeIn 2s ease-out !important;
+            }
+            
+            @keyframes slowFadeIn {
+                0% { opacity: 0; transform: scale(1.4) translateY(-15px); }
+                100% { opacity: 1; transform: scale(1.4) translateY(0); }
+            }
+        }
     </style>
 </head>
 <body>
 <div class="container">
     <div class="logo-header">
         <img src="impact-logo-vert-tag-color.png" alt="Impact Entertainment Group Logo">
-        <!-- Dynamic Connection Status -->
         <div id="connectionStatus" class="status-indicator status-checking">
             <span class="status-dot"></span>
             <span id="statusText">Checking Connection...</span>
@@ -192,7 +234,7 @@
             <label for="availability">General availability or scheduling / physical limitations:</label>
             <input type="text" id="availability" name="availability">
         </div>
-        <!-- Consent Section -->
+        
         <div class="consent-row">
             <input type="checkbox" id="consent" name="consent" required>
             <label for="consent">I agree to be contacted by IMPACT Entertainment Group regarding training, film, and employment opportunities. *</label>
@@ -201,6 +243,16 @@
         <p id="statusMessage"></p>
     </form>
 </div>
+
+<!-- Flatpickr JS (Initializes the Desktop Calendar) -->
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script>
+    // By default, Flatpickr reverts to the native date picker on mobile phones,
+    // meaning your iPhone users will still get the exact mobile experience you like!
+    flatpickr("input[type=date]", {
+        disableMobile: false 
+    });
+</script>
 
 <!-- FIREBASE INTEGRATION -->
 <script type="module">
@@ -217,12 +269,9 @@
         databaseURL: "https://impact-datatrak-default-rtdb.firebaseio.com"
     };
 
-    // Initialize exactly one Firebase connection
     const app = initializeApp(firebaseConfig);
     const rtdb = getDatabase(app);
 
-    // Two-Way Connection Status Indicator
-    // .info/connected only returns true when the client is actively sending and listening
     const statusEl = document.getElementById('connectionStatus');
     const statusTextEl = document.getElementById('statusText');
     const connectedRef = ref(rtdb, ".info/connected");
@@ -251,10 +300,9 @@
             const formData = new FormData(form);
             const rawData = Object.fromEntries(formData.entries());
             
-            // Format the data exactly how your React Dashboard expects it
             const newTask = {
                 id: Date.now(), 
-                group: 'group1', // Drops it directly into the "INBOX" column
+                group: 'group1',
                 timestamp: new Date().toISOString().split('T')[0],
                 fullName: rawData.fullName || '',
                 phone: rawData.phone || '',
@@ -275,20 +323,16 @@
                 pipelineStatus: 'New'
             };
 
-            // Grab the existing array of tasks from the Realtime Database
             const tasksRef = ref(rtdb, 'userData/tasks');
             const snapshot = await get(tasksRef);
             let tasks = snapshot.val() || [];
 
-            // Ensure we are working with an array
             if (!Array.isArray(tasks)) {
                 tasks = Object.values(tasks);
             }
 
-            // Assign the next sequential ID
             newTask.id = Math.max(...(tasks.length ? tasks.map(t => t.id || 0) : [0]), 0) + 1;
             
-            // Append the new intake and push back to the database
             tasks.push(newTask);
             await set(tasksRef, tasks);
             
