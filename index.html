@@ -52,7 +52,14 @@
             display: flex; align-items: flex-start; gap: 10px;
             margin-top: 20px; font-weight: normal !important; color: #444;
         }
-        .consent-row input[type="checkbox"] { width: auto; margin-top: 5px; transform: scale(1.3); cursor: pointer; }
+        .consent-row input[type="checkbox"] { 
+    width: auto; 
+    margin-top: 8px; 
+    margin-left: 8px;
+    margin-right: 12px; 
+    transform: scale(2.5); 
+    cursor: pointer; 
+}
         
         /* Status Indicator Styles */
         .status-indicator {
@@ -140,7 +147,7 @@
         <!-- Consent Section -->
         <div class="consent-row">
             <input type="checkbox" id="consent" name="consent" required>
-            <label for="consent" style="font-weight: normal; margin-top: 20px;">I agree to be contacted by IMPACT Entertainment Group regarding training, film, and employment opportunities. *</label>
+            <label for="consent" style="font-weight: normal; margin-top: 5px;">I agree to be contacted by IMPACT Entertainment Group regarding training, film, and employment opportunities. *</label>
         </div>
         <button type="submit" id="submitBtn">Submit Application</button>
         <p id="statusMessage"></p>
