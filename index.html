@@ -253,15 +253,38 @@
             <label for="availability">General availability or scheduling / physical limitations:</label>
             <input type="text" id="availability" name="availability">
         </div>
+        
+        <div class="consent-row">
+            <input type="checkbox" id="consent" name="consent" required>
+            <label for="consent">I agree to be contacted by IMPACT Entertainment Group regarding training, film, and employment opportunities. *</label>
+        </div>
+        <button type="submit" id="submitBtn">Submit Application</button>
+        <p id="statusMessage"></p>
+    </form>
+</div>
 
-<!-- Flatpickr JS (Initializes the Desktop Calendar) -->
+<!-- Scripts -->
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script>
-    // By default, Flatpickr reverts to the native date picker on mobile phones,
-    // meaning your iPhone users will still get the exact mobile experience you like!
+    // Flatpickr initialization
     flatpickr("input[type=date]", {
         disableMobile: false 
     });
+
+    // NEW: Trade School Field Toggle function
+    function toggleTradeSchool(selectedValue) {
+        const container = document.getElementById('tradeSchoolContainer');
+        const input = document.getElementById('tradeSchool');
+        
+        if (selectedValue === 'Trade School Certificate') {
+            container.style.display = 'block';
+            input.required = true; // Makes the field mandatory if selected
+        } else {
+            container.style.display = 'none';
+            input.required = false; 
+            input.value = ''; // Clears the field if they change their mind
+        }
+    }
 </script>
 
 <!-- FIREBASE INTEGRATION -->
@@ -327,7 +350,7 @@
                 location: rawData.cityState || '',
                 transportation: rawData.transport || '',
                 
-                // NEW FIELDS ADDED HERE:
+                // NEW DATA POINTS ADDED
                 educationLevel: rawData.education || '',
                 tradeSchoolDetails: rawData.tradeSchool || '',
                 
@@ -337,6 +360,7 @@
                 availability: rawData.availability || '',
                 pipelineStatus: 'New'
             };
+
             const tasksRef = ref(rtdb, 'userData/tasks');
             const snapshot = await get(tasksRef);
             let tasks = snapshot.val() || [];
@@ -353,6 +377,10 @@
             statusMessage.style.color = "#2e7d32";
             statusMessage.textContent = "Application successfully sent!";
             form.reset();
+            
+            // NEW: Hide the trade school container again if the form is successfully reset
+            document.getElementById('tradeSchoolContainer').style.display = 'none';
+            
         } catch (error) {
             console.error("Submission failed:", error);
             statusMessage.style.color = "#d32f2f";
@@ -362,20 +390,6 @@
             submitBtn.textContent = "Submit Application";
         }
     });
-<script>
-    function toggleTradeSchool(selectedValue) {
-        const container = document.getElementById('tradeSchoolContainer');
-        const input = document.getElementById('tradeSchool');
-        
-        if (selectedValue === 'Trade School Certificate') {
-            container.style.display = 'block';
-            input.required = true; // Makes the field mandatory if selected
-        } else {
-            container.style.display = 'none';
-            input.required = false; 
-            input.value = ''; // Clears the field if they change their mind
-        }
-    }
 </script>
 </body>
 </html>
