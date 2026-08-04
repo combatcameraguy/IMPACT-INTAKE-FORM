@@ -326,13 +326,17 @@
                 terminalLeave: rawData.terminalLeave || '',
                 location: rawData.cityState || '',
                 transportation: rawData.transport || '',
+                
+                // NEW FIELDS ADDED HERE:
+                educationLevel: rawData.education || '',
+                tradeSchoolDetails: rawData.tradeSchool || '',
+                
                 opportunities: rawData.opportunities || '',
                 skills: rawData.skills || '',
                 areasOfInterest: rawData.interestAreas || '',
                 availability: rawData.availability || '',
                 pipelineStatus: 'New'
             };
-
             const tasksRef = ref(rtdb, 'userData/tasks');
             const snapshot = await get(tasksRef);
             let tasks = snapshot.val() || [];
