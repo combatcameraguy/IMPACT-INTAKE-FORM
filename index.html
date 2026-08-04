@@ -225,6 +225,25 @@
         </div>
         <div class="form-section">
             <div class="section-title">Interests & Capabilities</div>
+            
+            <!-- NEW: Education Dropdown -->
+            <label for="education">Level of Education *</label>
+            <select id="education" name="education" required onchange="toggleTradeSchool(this.value)">
+                <option value="">Select education level...</option>
+                <option value="High school degree or GED">High school degree or GED</option>
+                <option value="Associates Degree">Associates Degree</option>
+                <option value="Bachelors Degree">Bachelors Degree</option>
+                <option value="Masters Degree">Masters Degree</option>
+                <option value="Doctorate">Doctorate</option>
+                <option value="Trade School Certificate">Trade School Certificate</option>
+            </select>
+
+            <!-- NEW: Hidden Trade School Text Field -->
+            <div id="tradeSchoolContainer" style="display: none;">
+                <label for="tradeSchool">In what field? *</label>
+                <input type="text" id="tradeSchool" name="tradeSchool">
+            </div>
+
             <label for="opportunities">Which opportunities with IMPACT are you interested in? (Film, Music, Lighting, Script writing, Set Production, Editing, Motion graphics, Podcasting, etc…)</label>
             <input type="text" id="opportunities" name="opportunities" required>
             <label for="skills">Please list any skills, certifications, trades, or experience (military or civilian)</label>
@@ -234,15 +253,6 @@
             <label for="availability">General availability or scheduling / physical limitations:</label>
             <input type="text" id="availability" name="availability">
         </div>
-        
-        <div class="consent-row">
-            <input type="checkbox" id="consent" name="consent" required>
-            <label for="consent">I agree to be contacted by IMPACT Entertainment Group regarding training, film, and employment opportunities. *</label>
-        </div>
-        <button type="submit" id="submitBtn">Submit Application</button>
-        <p id="statusMessage"></p>
-    </form>
-</div>
 
 <!-- Flatpickr JS (Initializes the Desktop Calendar) -->
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
@@ -348,6 +358,20 @@
             submitBtn.textContent = "Submit Application";
         }
     });
+<script>
+    function toggleTradeSchool(selectedValue) {
+        const container = document.getElementById('tradeSchoolContainer');
+        const input = document.getElementById('tradeSchool');
+        
+        if (selectedValue === 'Trade School Certificate') {
+            container.style.display = 'block';
+            input.required = true; // Makes the field mandatory if selected
+        } else {
+            container.style.display = 'none';
+            input.required = false; 
+            input.value = ''; // Clears the field if they change their mind
+        }
+    }
 </script>
 </body>
 </html>
