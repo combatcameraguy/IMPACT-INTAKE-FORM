@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Impact Apply- Intake</title>
     
+    <!-- Add Google Fonts for NEXA -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nexa:wght@300;900&display=swap" rel="stylesheet">
+    
     <!-- Flatpickr CSS for Custom Desktop Calendar -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     
@@ -13,8 +18,10 @@
             --impact-yellow: #f7b512;
             --impact-grey: #3c3c3c;
         }
+        
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Nexa', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-weight: 300; /* Default to ExtraLight */
             background-color: #3c3c3c;
             display: flex;
             justify-content: center;
@@ -22,6 +29,7 @@
             min-height: 100vh;
             margin: 0;
         }
+        
         .container {
             background: white;
             padding: 2rem;
@@ -30,16 +38,49 @@
             width: 100%;
             max-width: 700px;
         }
-        .logo-header { text-align: center; margin-bottom: 2rem; padding-bottom: 1rem; }
-        .logo-header img { max-width: 200px; height: auto; display: block; margin: 0 auto; }
-        h2 { color: var(--impact-grey); border-bottom: 3px solid var(--impact-yellow); padding-bottom: 10px; margin-top: 0; }
+        
+        .logo-header { 
+            text-align: center; 
+            margin-bottom: 2rem; 
+            padding-bottom: 1rem; 
+        }
+        
+        .logo-header img { 
+            max-width: 200px; 
+            height: auto; 
+            display: block; 
+            margin: 0 auto; 
+        }
+        
+        h2 { 
+            font-family: 'Nexa', sans-serif;
+            font-weight: 900; /* Heavy weight for headings */
+            color: var(--impact-grey); 
+            border-bottom: 3px solid var(--impact-yellow); 
+            padding-bottom: 10px; 
+            margin-top: 0; 
+        }
 
         .form-section { margin-bottom: 1.5rem; }
+        
         .section-title {
-            background-color: var(--impact-grey); color: var(--impact-yellow);
-            padding: 8px 12px; font-size: 1.1rem; margin-bottom: 15px; border-radius: 4px;
+            font-family: 'Nexa', sans-serif;
+            font-weight: 900; /* Heavy weight for section titles */
+            background-color: var(--impact-grey); 
+            color: var(--impact-yellow);
+            padding: 8px 12px; 
+            font-size: 1.1rem; 
+            margin-bottom: 15px; 
+            border-radius: 4px;
         }
-        label { display: block; margin-top: 10px; font-weight: bold; color: #444; cursor: pointer; }
+        
+        label { 
+            display: block; 
+            margin-top: 10px; 
+            font-weight: 300; /* ExtraLight */
+            color: #444; 
+            cursor: pointer; 
+        }
 
         /* UNIFORM INPUT HEIGHTS */
         input[type="text"], input[type="email"], input[type="tel"],
@@ -50,7 +91,8 @@
             border: 1px solid #ccc;
             border-radius: 4px; 
             box-sizing: border-box;
-            font-family: inherit;
+            font-family: 'Nexa', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-weight: 300; /* ExtraLight */
             font-size: 16px;
             height: 48px; /* Forces all fields to be the exact same height */
         }
@@ -74,10 +116,19 @@
         }
 
         button {
-            background-color: var(--impact-yellow); color: var(--impact-grey);
-            padding: 15px 20px; border: none; border-radius: 4px; cursor: pointer;
-            font-size: 18px; width: 100%; margin-top: 20px; font-weight: bold;
+            font-family: 'Nexa', sans-serif;
+            font-weight: 900; /* Heavy weight for buttons */
+            background-color: var(--impact-yellow); 
+            color: var(--impact-grey);
+            padding: 15px 20px; 
+            border: none; 
+            border-radius: 4px; 
+            cursor: pointer;
+            font-size: 18px; 
+            width: 100%; 
+            margin-top: 20px; 
         }
+        
         button:hover { opacity: 0.9; }
         
         /* Enhanced Consent Section Container */
@@ -129,7 +180,7 @@
         }
 
         .consent-row label {
-            font-weight: normal; 
+            font-weight: 300; /* ExtraLight */
             color: #444; 
             cursor: pointer; 
             margin-top: 2px;
@@ -138,15 +189,40 @@
         
         /* Status Indicator Styles */
         .status-indicator {
-            display: inline-flex; align-items: center; gap: 8px; margin-top: 10px;
-            font-size: 14px; font-weight: 600; padding: 6px 12px; border-radius: 20px;
+            display: inline-flex; 
+            align-items: center; 
+            gap: 8px; 
+            margin-top: 10px;
+            font-size: 14px; 
+            font-weight: 300; /* ExtraLight */
+            padding: 6px 12px; 
+            border-radius: 20px;
         }
-        .status-dot { width: 10px; height: 10px; border-radius: 50%; }
-        .status-checking .status-dot { background-color: #fbbf24; animation: pulse 1.5s infinite; }
-        .status-online .status-dot { background-color: #22c55e; }
-        .status-offline .status-dot { background-color: #ef4444; }
         
-        @keyframes pulse { 0% { opacity: 0.4; } 50% { opacity: 1; } 100% { opacity: 0.4; } }
+        .status-dot { 
+            width: 10px; 
+            height: 10px; 
+            border-radius: 50%; 
+        }
+        
+        .status-checking .status-dot { 
+            background-color: #fbbf24; 
+            animation: pulse 1.5s infinite; 
+        }
+        
+        .status-online .status-dot { 
+            background-color: #22c55e; 
+        }
+        
+        .status-offline .status-dot { 
+            background-color: #ef4444; 
+        }
+        
+        @keyframes pulse { 
+            0% { opacity: 0.4; } 
+            50% { opacity: 1; } 
+            100% { opacity: 0.4; } 
+        }
 
         /* CUSTOM DESKTOP CALENDAR OVERRIDES (Applies to PC only) */
         @media (min-width: 768px) {
