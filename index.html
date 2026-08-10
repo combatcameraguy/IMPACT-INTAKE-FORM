@@ -366,7 +366,7 @@
 <!-- FIREBASE INTEGRATION -->
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getDatabase, ref, onValue, get, set } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+    import { getDatabase, ref, onValue, push, set } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
     const firebaseConfig = {  
         apiKey: "AIzaSyCEAoWW1iGQJz9cNJINvONIDaidXLkxK8s",  
@@ -410,7 +410,7 @@
             const rawData = Object.fromEntries(formData.entries());
             
             const newTask = {
-                id: Date.now(), 
+                id: Date.now(), // Securely generates a unique ID without needing to read the DB
                 group: 'group1',
                 timestamp: new Date().toISOString().split('T')[0],
                 fullName: rawData.fullName || '',
@@ -425,11 +425,8 @@
                 terminalLeave: rawData.terminalLeave || '',
                 location: rawData.cityState || '',
                 transportation: rawData.transport || '',
-                
-                // NEW DATA POINTS ADDED
                 educationLevel: rawData.education || '',
                 tradeSchoolDetails: rawData.tradeSchool || '',
-                
                 opportunities: rawData.opportunities || '',
                 skills: rawData.skills || '',
                 areasOfInterest: rawData.interestAreas || '',
@@ -437,24 +434,14 @@
                 pipelineStatus: 'New'
             };
 
+            // Safely push the new data directly to the database
             const tasksRef = ref(rtdb, 'userData/tasks');
-            const snapshot = await get(tasksRef);
-            let tasks = snapshot.val() || [];
-
-            if (!Array.isArray(tasks)) {
-                tasks = Object.values(tasks);
-            }
-
-            newTask.id = Math.max(...(tasks.length ? tasks.map(t => t.id || 0) : [0]), 0) + 1;
-            
-            tasks.push(newTask);
-            await set(tasksRef, tasks);
+            const newTaskRef = push(tasksRef);
+            await set(newTaskRef, newTask);
             
             statusMessage.style.color = "#2e7d32";
             statusMessage.textContent = "Application successfully sent!";
             form.reset();
-            
-            // NEW: Hide the trade school container again if the form is successfully reset
             document.getElementById('tradeSchoolContainer').style.display = 'none';
             
         } catch (error) {
