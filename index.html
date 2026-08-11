@@ -3,12 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Impact Apply- Intake</title>
+    <title>IMPACT Intake Form</title>
     
-    <!-- Add Google Fonts for NEXA -->
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="favicon.png">
+    
+    <!-- Google Fonts for Poppins & Montserrat Fallbacks -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Nexa:wght@300;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;900&family=Poppins:wght@700;900&display=swap" rel="stylesheet">
     
     <!-- Flatpickr CSS for Custom Desktop Calendar -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
@@ -20,8 +23,8 @@
         }
         
         body {
-            font-family: 'Nexa', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            font-weight: 300; /* Default to ExtraLight */
+            font-family: 'Montserrat', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-weight: 300; /* Default to Light */
             background-color: #3c3c3c;
             display: flex;
             justify-content: center;
@@ -53,7 +56,7 @@
         }
         
         h2 { 
-            font-family: 'Nexa', sans-serif;
+            font-family: 'Poppins', 'Montserrat', sans-serif;
             font-weight: 900; /* Heavy weight for headings */
             color: var(--impact-grey); 
             border-bottom: 3px solid var(--impact-yellow); 
@@ -64,7 +67,7 @@
         .form-section { margin-bottom: 1.5rem; }
         
         .section-title {
-            font-family: 'Nexa', sans-serif;
+            font-family: 'Poppins', 'Montserrat', sans-serif;
             font-weight: 900; /* Heavy weight for section titles */
             background-color: var(--impact-grey); 
             color: var(--impact-yellow);
@@ -77,7 +80,7 @@
         label { 
             display: block; 
             margin-top: 10px; 
-            font-weight: 300; /* ExtraLight */
+            font-weight: 600; /* Slightly bolder for readability */
             color: #444; 
             cursor: pointer; 
         }
@@ -91,8 +94,8 @@
             border: 1px solid #ccc;
             border-radius: 4px; 
             box-sizing: border-box;
-            font-family: 'Nexa', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            font-weight: 300; /* ExtraLight */
+            font-family: 'Montserrat', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-weight: 400; /* Regular weight for typing */
             font-size: 16px;
             height: 48px; /* Forces all fields to be the exact same height */
         }
@@ -116,7 +119,7 @@
         }
 
         button {
-            font-family: 'Nexa', sans-serif;
+            font-family: 'Poppins', 'Montserrat', sans-serif;
             font-weight: 900; /* Heavy weight for buttons */
             background-color: var(--impact-yellow); 
             color: var(--impact-grey);
@@ -180,7 +183,7 @@
         }
 
         .consent-row label {
-            font-weight: 300; /* ExtraLight */
+            font-weight: 600;
             color: #444; 
             cursor: pointer; 
             margin-top: 2px;
@@ -194,7 +197,7 @@
             gap: 8px; 
             margin-top: 10px;
             font-size: 14px; 
-            font-weight: 300; /* ExtraLight */
+            font-weight: 600;
             padding: 6px 12px; 
             border-radius: 20px;
         }
@@ -366,7 +369,7 @@
 <!-- FIREBASE INTEGRATION -->
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getDatabase, ref, onValue, push, set } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+    import { getDatabase, ref, onValue, get, set } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
     const firebaseConfig = {  
         apiKey: "AIzaSyCEAoWW1iGQJz9cNJINvONIDaidXLkxK8s",  
@@ -410,7 +413,7 @@
             const rawData = Object.fromEntries(formData.entries());
             
             const newTask = {
-                id: Date.now(), // Securely generates a unique ID without needing to read the DB
+                id: Date.now(), 
                 group: 'group1',
                 timestamp: new Date().toISOString().split('T')[0],
                 fullName: rawData.fullName || '',
@@ -425,8 +428,11 @@
                 terminalLeave: rawData.terminalLeave || '',
                 location: rawData.cityState || '',
                 transportation: rawData.transport || '',
+                
+                // NEW DATA POINTS ADDED
                 educationLevel: rawData.education || '',
                 tradeSchoolDetails: rawData.tradeSchool || '',
+                
                 opportunities: rawData.opportunities || '',
                 skills: rawData.skills || '',
                 areasOfInterest: rawData.interestAreas || '',
@@ -434,14 +440,24 @@
                 pipelineStatus: 'New'
             };
 
-            // Safely push the new data directly to the database
             const tasksRef = ref(rtdb, 'userData/tasks');
-            const newTaskRef = push(tasksRef);
-            await set(newTaskRef, newTask);
+            const snapshot = await get(tasksRef);
+            let tasks = snapshot.val() || [];
+
+            if (!Array.isArray(tasks)) {
+                tasks = Object.values(tasks);
+            }
+
+            newTask.id = Math.max(...(tasks.length ? tasks.map(t => t.id || 0) : [0]), 0) + 1;
+            
+            tasks.push(newTask);
+            await set(tasksRef, tasks);
             
             statusMessage.style.color = "#2e7d32";
             statusMessage.textContent = "Application successfully sent!";
             form.reset();
+            
+            // NEW: Hide the trade school container again if the form is successfully reset
             document.getElementById('tradeSchoolContainer').style.display = 'none';
             
         } catch (error) {
