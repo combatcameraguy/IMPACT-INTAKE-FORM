@@ -440,18 +440,13 @@
                 pipelineStatus: 'New'
             };
 
-            const tasksRef = ref(rtdb, 'userData/tasks');
-            const snapshot = await get(tasksRef);
-            let tasks = snapshot.val() || [];
-
-            if (!Array.isArray(tasks)) {
-                tasks = Object.values(tasks);
-            }
-
-            newTask.id = Math.max(...(tasks.length ? tasks.map(t => t.id || 0) : [0]), 0) + 1;
+           // Generate a unique ID using the current timestamp
+            const uniqueId = Date.now().toString();
+            newTask.id = uniqueId;
             
-            tasks.push(newTask);
-            await set(tasksRef, tasks);
+            // Point directly to a new specific task node and write the data without reading first
+            const newTaskRef = ref(rtdb, `userData/tasks/${uniqueId}`);
+            await set(newTaskRef, newTask);
             
             statusMessage.style.color = "#2e7d32";
             statusMessage.textContent = "Application successfully sent!";
