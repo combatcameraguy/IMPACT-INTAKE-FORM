@@ -305,7 +305,6 @@
         <div class="form-section">
             <div class="section-title">Interests & Capabilities</div>
             
-            <!-- NEW: Education Dropdown -->
             <label for="education">Level of Education</label>
             <select id="education" name="education" onchange="toggleTradeSchool(this.value)">
                 <option value="">Select education level...</option>
@@ -317,7 +316,6 @@
                 <option value="Trade School Certificate">Trade School Certificate</option>
             </select>
 
-            <!-- NEW: Hidden Trade School Text Field -->
             <div id="tradeSchoolContainer" style="display: none;">
                 <label for="tradeSchool">In what field?</label>
                 <input type="text" id="tradeSchool" name="tradeSchool">
@@ -352,7 +350,7 @@
         disableMobile: false 
     });
 
-    // NEW: Trade School Field Toggle function
+    // Trade School Field Toggle function
     function toggleTradeSchool(selectedValue) {
         const container = document.getElementById('tradeSchoolContainer');
         const input = document.getElementById('tradeSchool');
@@ -428,11 +426,8 @@
                 terminalLeave: rawData.terminalLeave || '',
                 location: rawData.cityState || '',
                 transportation: rawData.transport || '',
-                
-                // NEW DATA POINTS ADDED
                 educationLevel: rawData.education || '',
                 tradeSchoolDetails: rawData.tradeSchool || '',
-                
                 opportunities: rawData.opportunities || '',
                 skills: rawData.skills || '',
                 areasOfInterest: rawData.interestAreas || '',
@@ -449,16 +444,20 @@
                 tasks = Object.values(tasks);
             }
 
-            newTask.id = Math.max(...(tasks.length ? tasks.map(t => t.id || 0) : [0]), 0) + 1;
+            // SAFETY NET: Filter out any null "ghost" values caused by manually deleting entries in Firebase
+            let validTasks = tasks.filter(t => t !== null && typeof t === 'object');
+
+            // Generate the new ID safely
+            newTask.id = Math.max(...(validTasks.length ? validTasks.map(t => t.id || 0) : [0]), 0) + 1;
             
-            tasks.push(newTask);
-            await set(tasksRef, tasks);
+            validTasks.push(newTask);
+            await set(tasksRef, validTasks);
             
             statusMessage.style.color = "#2e7d32";
             statusMessage.textContent = "Application successfully sent!";
             form.reset();
             
-            // NEW: Hide the trade school container again if the form is successfully reset
+            // Hide the trade school container again if the form is successfully reset
             document.getElementById('tradeSchoolContainer').style.display = 'none';
             
         } catch (error) {
