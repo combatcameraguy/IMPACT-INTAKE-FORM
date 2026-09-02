@@ -264,10 +264,10 @@
             <input type="tel" id="phone" name="phone" required>
             <label for="email">Email Address *</label>
             <input type="email" id="email" name="email" required>
-            <label for="cityState">City, State (Duty Location)</label>
-            <input type="text" id="cityState" name="cityState">
+            <label for="cityState">City, State (Duty Location) *</label>
+            <input type="text" id="cityState" name="cityState" required>
             <label for="transport">Do you have reliable transportation?</label>
-            <select id="transport" name="transport">
+            <select id="transport" name="transport" required>
                 <option value="">Select option...</option>
                 <option value="Yes">Yes</option>
                 <option value="No">No</option>
@@ -276,7 +276,7 @@
         <div class="form-section">
             <div class="section-title">Military Background</div>
             <label for="mStatus">What is your current status?</label>
-            <select id="mStatus" name="mStatus">
+            <select id="mStatus" name="mStatus" required>
                 <option value="">Select status...</option>
                 <option value="Active Duty">Active Duty</option>
                 <option value="Transitioning Service Member">Transitioning Service Member</option>
@@ -284,7 +284,7 @@
                 <option value="Military Spouse">Military Spouse</option>
             </select>
             <label for="branch">Branch of Service</label>
-            <select id="branch" name="branch">
+            <select id="branch" name="branch" required>
                 <option value="">Select branch...</option>
                 <option value="Army">Army</option>
                 <option value="Navy">Navy</option>
@@ -294,9 +294,9 @@
                 <option value="Space Force">Space Force</option>
             </select>
             <label for="mos">MOS / Job Specialty</label>
-            <input type="text" id="mos" name="mos">
+            <input type="text" id="mos" name="mos" required>
             <label for="payGrade">Pay Grade</label>
-            <input type="text" id="payGrade" name="payGrade">
+            <input type="text" id="payGrade" name="payGrade" required>
             <label for="etsDate">ETS / Retirement Date *</label>
             <input type="date" id="etsDate" name="etsDate" required>
             <label for="terminalLeave">Start of Terminal Leave Date (if known)</label>
@@ -305,8 +305,9 @@
         <div class="form-section">
             <div class="section-title">Interests & Capabilities</div>
             
+            <!-- NEW: Education Dropdown -->
             <label for="education">Level of Education</label>
-            <select id="education" name="education" onchange="toggleTradeSchool(this.value)">
+            <select id="education" name="education" required onchange="toggleTradeSchool(this.value)">
                 <option value="">Select education level...</option>
                 <option value="High school degree or GED">High school degree or GED</option>
                 <option value="Associates Degree">Associates Degree</option>
@@ -316,25 +317,24 @@
                 <option value="Trade School Certificate">Trade School Certificate</option>
             </select>
 
+            <!-- NEW: Hidden Trade School Text Field -->
             <div id="tradeSchoolContainer" style="display: none;">
                 <label for="tradeSchool">In what field?</label>
                 <input type="text" id="tradeSchool" name="tradeSchool">
             </div>
 
             <label for="opportunities">Which opportunities with IMPACT are you interested in? (Film, Music, Lighting, Script writing, Set Production, Editing, Motion graphics, Podcasting, etc…)</label>
-            <input type="text" id="opportunities" name="opportunities">
+            <input type="text" id="opportunities" name="opportunities" required>
             <label for="skills">Please list any skills, certifications, trades, or experience (military or civilian)</label>
             <textarea id="skills" name="skills" rows="4"></textarea>
             <label for="interestAreas">Which areas are you MOST interested in working in?</label>
             <input type="text" id="interestAreas" name="interestAreas">
             <label for="availability">General availability or scheduling / physical limitations:</label>
             <input type="text" id="availability" name="availability">
-            <label for="referralSource">How did you hear about us?</label>
-            <input type="text" id="referralSource" name="referralSource">
         </div>
         
         <div class="consent-row">
-            <input type="checkbox" id="consent" name="consent">
+            <input type="checkbox" id="consent" name="consent" required>
             <label for="consent">I agree to be contacted by IMPACT Entertainment Group.</label>
         </div>
         <button type="submit" id="submitBtn">Submit Application</button>
@@ -350,15 +350,17 @@
         disableMobile: false 
     });
 
-    // Trade School Field Toggle function
+    // NEW: Trade School Field Toggle function
     function toggleTradeSchool(selectedValue) {
         const container = document.getElementById('tradeSchoolContainer');
         const input = document.getElementById('tradeSchool');
         
         if (selectedValue === 'Trade School Certificate') {
             container.style.display = 'block';
+            input.required = true; // Makes the field mandatory if selected
         } else {
             container.style.display = 'none';
+            input.required = false; 
             input.value = ''; // Clears the field if they change their mind
         }
     }
@@ -426,13 +428,15 @@
                 terminalLeave: rawData.terminalLeave || '',
                 location: rawData.cityState || '',
                 transportation: rawData.transport || '',
+                
+                // NEW DATA POINTS ADDED
                 educationLevel: rawData.education || '',
                 tradeSchoolDetails: rawData.tradeSchool || '',
+                
                 opportunities: rawData.opportunities || '',
                 skills: rawData.skills || '',
                 areasOfInterest: rawData.interestAreas || '',
                 availability: rawData.availability || '',
-                referralSource: rawData.referralSource || '',
                 pipelineStatus: 'New'
             };
 
@@ -444,20 +448,16 @@
                 tasks = Object.values(tasks);
             }
 
-            // SAFETY NET: Filter out any null "ghost" values caused by manually deleting entries in Firebase
-            let validTasks = tasks.filter(t => t !== null && typeof t === 'object');
-
-            // Generate the new ID safely
-            newTask.id = Math.max(...(validTasks.length ? validTasks.map(t => t.id || 0) : [0]), 0) + 1;
+            newTask.id = Math.max(...(tasks.length ? tasks.map(t => t.id || 0) : [0]), 0) + 1;
             
-            validTasks.push(newTask);
-            await set(tasksRef, validTasks);
+            tasks.push(newTask);
+            await set(tasksRef, tasks);
             
             statusMessage.style.color = "#2e7d32";
             statusMessage.textContent = "Application successfully sent!";
             form.reset();
             
-            // Hide the trade school container again if the form is successfully reset
+            // NEW: Hide the trade school container again if the form is successfully reset
             document.getElementById('tradeSchoolContainer').style.display = 'none';
             
         } catch (error) {
