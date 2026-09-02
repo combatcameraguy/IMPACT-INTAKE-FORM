@@ -264,10 +264,10 @@
             <input type="tel" id="phone" name="phone" required>
             <label for="email">Email Address *</label>
             <input type="email" id="email" name="email" required>
-            <label for="cityState">City, State (Duty Location) *</label>
-            <input type="text" id="cityState" name="cityState" required>
+            <label for="cityState">City, State (Duty Location)</label>
+            <input type="text" id="cityState" name="cityState">
             <label for="transport">Do you have reliable transportation?</label>
-            <select id="transport" name="transport" required>
+            <select id="transport" name="transport">
                 <option value="">Select option...</option>
                 <option value="Yes">Yes</option>
                 <option value="No">No</option>
@@ -276,7 +276,7 @@
         <div class="form-section">
             <div class="section-title">Military Background</div>
             <label for="mStatus">What is your current status?</label>
-            <select id="mStatus" name="mStatus" required>
+            <select id="mStatus" name="mStatus">
                 <option value="">Select status...</option>
                 <option value="Active Duty">Active Duty</option>
                 <option value="Transitioning Service Member">Transitioning Service Member</option>
@@ -284,7 +284,7 @@
                 <option value="Military Spouse">Military Spouse</option>
             </select>
             <label for="branch">Branch of Service</label>
-            <select id="branch" name="branch" required>
+            <select id="branch" name="branch">
                 <option value="">Select branch...</option>
                 <option value="Army">Army</option>
                 <option value="Navy">Navy</option>
@@ -294,20 +294,20 @@
                 <option value="Space Force">Space Force</option>
             </select>
             <label for="mos">MOS / Job Specialty</label>
-            <input type="text" id="mos" name="mos" required>
+            <input type="text" id="mos" name="mos">
             <label for="payGrade">Pay Grade</label>
-            <input type="text" id="payGrade" name="payGrade" required>
+            <input type="text" id="payGrade" name="payGrade">
             <label for="etsDate">ETS / Retirement Date *</label>
             <input type="date" id="etsDate" name="etsDate" required>
             <label for="terminalLeave">Start of Terminal Leave Date (if known)</label>
             <input type="date" id="terminalLeave" name="terminalLeave">
         </div>
         <div class="form-section">
-            <div class="section-title">Interests & Capabilities (N/A if not known)</div>
+            <div class="section-title">Interests & Capabilities</div>
             
             <!-- NEW: Education Dropdown -->
             <label for="education">Level of Education</label>
-            <select id="education" name="education" required onchange="toggleTradeSchool(this.value)">
+            <select id="education" name="education" onchange="toggleTradeSchool(this.value)">
                 <option value="">Select education level...</option>
                 <option value="High school degree or GED">High school degree or GED</option>
                 <option value="Associates Degree">Associates Degree</option>
@@ -324,17 +324,19 @@
             </div>
 
             <label for="opportunities">Which opportunities with IMPACT are you interested in? (Film, Music, Lighting, Script writing, Set Production, Editing, Motion graphics, Podcasting, etc…)</label>
-            <input type="text" id="opportunities" name="opportunities" required>
+            <input type="text" id="opportunities" name="opportunities">
             <label for="skills">Please list any skills, certifications, trades, or experience (military or civilian)</label>
             <textarea id="skills" name="skills" rows="4"></textarea>
             <label for="interestAreas">Which areas are you MOST interested in working in?</label>
             <input type="text" id="interestAreas" name="interestAreas">
             <label for="availability">General availability or scheduling / physical limitations:</label>
             <input type="text" id="availability" name="availability">
+            <label for="referralSource">How did you hear about us?</label>
+            <input type="text" id="referralSource" name="referralSource">
         </div>
         
         <div class="consent-row">
-            <input type="checkbox" id="consent" name="consent" required>
+            <input type="checkbox" id="consent" name="consent">
             <label for="consent">I agree to be contacted by IMPACT Entertainment Group.</label>
         </div>
         <button type="submit" id="submitBtn">Submit Application</button>
@@ -357,10 +359,8 @@
         
         if (selectedValue === 'Trade School Certificate') {
             container.style.display = 'block';
-            input.required = true; // Makes the field mandatory if selected
         } else {
             container.style.display = 'none';
-            input.required = false; 
             input.value = ''; // Clears the field if they change their mind
         }
     }
@@ -437,16 +437,22 @@
                 skills: rawData.skills || '',
                 areasOfInterest: rawData.interestAreas || '',
                 availability: rawData.availability || '',
+                referralSource: rawData.referralSource || '',
                 pipelineStatus: 'New'
             };
 
-           // Generate a unique ID using the current timestamp
-            const uniqueId = Date.now().toString();
-            newTask.id = uniqueId;
+            const tasksRef = ref(rtdb, 'userData/tasks');
+            const snapshot = await get(tasksRef);
+            let tasks = snapshot.val() || [];
+
+            if (!Array.isArray(tasks)) {
+                tasks = Object.values(tasks);
+            }
+
+            newTask.id = Math.max(...(tasks.length ? tasks.map(t => t.id || 0) : [0]), 0) + 1;
             
-            // Point directly to a new specific task node and write the data without reading first
-            const newTaskRef = ref(rtdb, `userData/tasks/${uniqueId}`);
-            await set(newTaskRef, newTask);
+            tasks.push(newTask);
+            await set(tasksRef, tasks);
             
             statusMessage.style.color = "#2e7d32";
             statusMessage.textContent = "Application successfully sent!";
