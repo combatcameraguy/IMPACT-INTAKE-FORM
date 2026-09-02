@@ -24,7 +24,7 @@
         
         body {
             font-family: 'Montserrat', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            font-weight: 300; /* Default to Light */
+            font-weight: 300; 
             background-color: #3c3c3c;
             display: flex;
             justify-content: center;
@@ -57,7 +57,7 @@
         
         h2 { 
             font-family: 'Poppins', 'Montserrat', sans-serif;
-            font-weight: 900; /* Heavy weight for headings */
+            font-weight: 900; 
             color: var(--impact-grey); 
             border-bottom: 3px solid var(--impact-yellow); 
             padding-bottom: 10px; 
@@ -68,7 +68,7 @@
         
         .section-title {
             font-family: 'Poppins', 'Montserrat', sans-serif;
-            font-weight: 900; /* Heavy weight for section titles */
+            font-weight: 900; 
             background-color: var(--impact-grey); 
             color: var(--impact-yellow);
             padding: 8px 12px; 
@@ -80,12 +80,11 @@
         label { 
             display: block; 
             margin-top: 10px; 
-            font-weight: 600; /* Slightly bolder for readability */
+            font-weight: 600; 
             color: #444; 
             cursor: pointer; 
         }
 
-        /* UNIFORM INPUT HEIGHTS */
         input[type="text"], input[type="email"], input[type="tel"],
         input[type="date"], select, textarea {
             width: 100%; 
@@ -95,21 +94,19 @@
             border-radius: 4px; 
             box-sizing: border-box;
             font-family: 'Montserrat', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            font-weight: 400; /* Regular weight for typing */
+            font-weight: 400; 
             font-size: 16px;
-            height: 48px; /* Forces all fields to be the exact same height */
+            height: 48px; 
         }
         
         textarea {
-            height: auto; /* Exclude textareas from the strict height */
+            height: auto; 
         }
 
-        /* FIX SQUISHED SELECT MENUS ON PC */
         select {
             appearance: none;
             -webkit-appearance: none;
             background-color: #fff;
-            /* Custom dropdown arrow to replace the ugly Windows one */
             background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23444' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
             background-repeat: no-repeat;
             background-position: right 12px center;
@@ -120,7 +117,7 @@
 
         button {
             font-family: 'Poppins', 'Montserrat', sans-serif;
-            font-weight: 900; /* Heavy weight for buttons */
+            font-weight: 900; 
             background-color: var(--impact-yellow); 
             color: var(--impact-grey);
             padding: 15px 20px; 
@@ -134,7 +131,6 @@
         
         button:hover { opacity: 0.9; }
         
-        /* Enhanced Consent Section Container */
         .consent-row {
             display: flex; 
             align-items: flex-start; 
@@ -190,7 +186,6 @@
             line-height: 1.5;
         }
         
-        /* Status Indicator Styles */
         .status-indicator {
             display: inline-flex; 
             align-items: center; 
@@ -227,13 +222,11 @@
             100% { opacity: 0.4; } 
         }
 
-        /* CUSTOM DESKTOP CALENDAR OVERRIDES (Applies to PC only) */
         @media (min-width: 768px) {
             .flatpickr-calendar.open {
-                transform: scale(1.4); /* Makes the calendar 40% larger */
+                transform: scale(1.4); 
                 transform-origin: top center;
                 margin-top: 10px;
-                /* 2-Second Opening Animation */
                 animation: slowFadeIn 1s ease-out !important;
             }
             
@@ -264,10 +257,10 @@
             <input type="tel" id="phone" name="phone" required>
             <label for="email">Email Address *</label>
             <input type="email" id="email" name="email" required>
-            <label for="cityState">City, State (Duty Location) *</label>
-            <input type="text" id="cityState" name="cityState" required>
+            <label for="cityState">City, State (Duty Location)</label>
+            <input type="text" id="cityState" name="cityState">
             <label for="transport">Do you have reliable transportation?</label>
-            <select id="transport" name="transport" required>
+            <select id="transport" name="transport">
                 <option value="">Select option...</option>
                 <option value="Yes">Yes</option>
                 <option value="No">No</option>
@@ -276,7 +269,7 @@
         <div class="form-section">
             <div class="section-title">Military Background</div>
             <label for="mStatus">What is your current status?</label>
-            <select id="mStatus" name="mStatus" required>
+            <select id="mStatus" name="mStatus">
                 <option value="">Select status...</option>
                 <option value="Active Duty">Active Duty</option>
                 <option value="Transitioning Service Member">Transitioning Service Member</option>
@@ -284,7 +277,7 @@
                 <option value="Military Spouse">Military Spouse</option>
             </select>
             <label for="branch">Branch of Service</label>
-            <select id="branch" name="branch" required>
+            <select id="branch" name="branch">
                 <option value="">Select branch...</option>
                 <option value="Army">Army</option>
                 <option value="Navy">Navy</option>
@@ -294,9 +287,9 @@
                 <option value="Space Force">Space Force</option>
             </select>
             <label for="mos">MOS / Job Specialty</label>
-            <input type="text" id="mos" name="mos" required>
+            <input type="text" id="mos" name="mos">
             <label for="payGrade">Pay Grade</label>
-            <input type="text" id="payGrade" name="payGrade" required>
+            <input type="text" id="payGrade" name="payGrade">
             <label for="etsDate">ETS / Retirement Date *</label>
             <input type="date" id="etsDate" name="etsDate" required>
             <label for="terminalLeave">Start of Terminal Leave Date (if known)</label>
@@ -305,9 +298,8 @@
         <div class="form-section">
             <div class="section-title">Interests & Capabilities</div>
             
-            <!-- NEW: Education Dropdown -->
             <label for="education">Level of Education</label>
-            <select id="education" name="education" required onchange="toggleTradeSchool(this.value)">
+            <select id="education" name="education" onchange="toggleTradeSchool(this.value)">
                 <option value="">Select education level...</option>
                 <option value="High school degree or GED">High school degree or GED</option>
                 <option value="Associates Degree">Associates Degree</option>
@@ -317,24 +309,25 @@
                 <option value="Trade School Certificate">Trade School Certificate</option>
             </select>
 
-            <!-- NEW: Hidden Trade School Text Field -->
             <div id="tradeSchoolContainer" style="display: none;">
                 <label for="tradeSchool">In what field?</label>
                 <input type="text" id="tradeSchool" name="tradeSchool">
             </div>
 
             <label for="opportunities">Which opportunities with IMPACT are you interested in? (Film, Music, Lighting, Script writing, Set Production, Editing, Motion graphics, Podcasting, etc…)</label>
-            <input type="text" id="opportunities" name="opportunities" required>
+            <input type="text" id="opportunities" name="opportunities">
             <label for="skills">Please list any skills, certifications, trades, or experience (military or civilian)</label>
             <textarea id="skills" name="skills" rows="4"></textarea>
             <label for="interestAreas">Which areas are you MOST interested in working in?</label>
             <input type="text" id="interestAreas" name="interestAreas">
             <label for="availability">General availability or scheduling / physical limitations:</label>
             <input type="text" id="availability" name="availability">
+            <label for="referralSource">How did you hear about us?</label>
+            <input type="text" id="referralSource" name="referralSource">
         </div>
         
         <div class="consent-row">
-            <input type="checkbox" id="consent" name="consent" required>
+            <input type="checkbox" id="consent" name="consent">
             <label for="consent">I agree to be contacted by IMPACT Entertainment Group.</label>
         </div>
         <button type="submit" id="submitBtn">Submit Application</button>
@@ -345,23 +338,19 @@
 <!-- Scripts -->
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script>
-    // Flatpickr initialization
     flatpickr("input[type=date]", {
         disableMobile: false 
     });
 
-    // NEW: Trade School Field Toggle function
     function toggleTradeSchool(selectedValue) {
         const container = document.getElementById('tradeSchoolContainer');
         const input = document.getElementById('tradeSchool');
         
         if (selectedValue === 'Trade School Certificate') {
             container.style.display = 'block';
-            input.required = true; // Makes the field mandatory if selected
         } else {
             container.style.display = 'none';
-            input.required = false; 
-            input.value = ''; // Clears the field if they change their mind
+            input.value = ''; 
         }
     }
 </script>
@@ -428,15 +417,13 @@
                 terminalLeave: rawData.terminalLeave || '',
                 location: rawData.cityState || '',
                 transportation: rawData.transport || '',
-                
-                // NEW DATA POINTS ADDED
                 educationLevel: rawData.education || '',
                 tradeSchoolDetails: rawData.tradeSchool || '',
-                
                 opportunities: rawData.opportunities || '',
                 skills: rawData.skills || '',
                 areasOfInterest: rawData.interestAreas || '',
                 availability: rawData.availability || '',
+                referralSource: rawData.referralSource || '',
                 pipelineStatus: 'New'
             };
 
@@ -457,7 +444,6 @@
             statusMessage.textContent = "Application successfully sent!";
             form.reset();
             
-            // NEW: Hide the trade school container again if the form is successfully reset
             document.getElementById('tradeSchoolContainer').style.display = 'none';
             
         } catch (error) {
