@@ -429,10 +429,14 @@
 
             const tasksRef = ref(rtdb, 'userData/tasks');
             const snapshot = await get(tasksRef);
-            let tasks = snapshot.val() || [];
-
-            if (!Array.isArray(tasks)) {
-                tasks = Object.values(tasks);
+            let rawTasks = snapshot.val();
+            let tasks = [];
+            
+            // Bulletproof array cleanup to handle objects, arrays, and null ghosts cleanly
+            if (Array.isArray(rawTasks)) {
+                tasks = rawTasks.filter(t => t !== null && typeof t === 'object');
+            } else if (rawTasks && typeof rawTasks === 'object') {
+                tasks = Object.values(rawTasks).filter(t => t !== null && typeof t === 'object');
             }
 
             newTask.id = Math.max(...(tasks.length ? tasks.map(t => t.id || 0) : [0]), 0) + 1;
@@ -449,7 +453,8 @@
         } catch (error) {
             console.error("Submission failed:", error);
             statusMessage.style.color = "#d32f2f";
-            statusMessage.textContent = "Error submitting application! Please try again.";
+            // Displays the exact Firebase error message on the screen
+            statusMessage.textContent = "Error: " + error.message;
         } finally {
             submitBtn.disabled = false;
             submitBtn.textContent = "Submit Application";
