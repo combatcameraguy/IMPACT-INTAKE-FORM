@@ -98,6 +98,7 @@
             font-weight: 400; 
             font-size: 16px;
             height: 48px; 
+            transition: all 0.3s ease;
         }
         
         textarea {
@@ -223,6 +224,19 @@
             100% { opacity: 0.4; } 
         }
 
+        /* CUSTOM ANIMATION FOR REQUIRED FIELDS */
+        @keyframes errorShake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-10px); }
+            40%, 80% { transform: translateX(10px); }
+        }
+        
+        .input-error {
+            animation: errorShake 0.4s ease-in-out;
+            border: 2px solid #ef4444 !important; /* Bold Red Border */
+            background-color: #fef2f2 !important; /* Light Red Background */
+        }
+
         @media (min-width: 768px) {
             .flatpickr-calendar.open {
                 transform: scale(1.4); 
@@ -245,10 +259,15 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            z-index: 9999;
+            z-index: 99999;
             opacity: 0;
-            animation: fadeIn 0.3s forwards ease-out;
+            transition: opacity 0.3s ease-out;
         }
+        
+        .modal-active {
+            opacity: 1 !important;
+        }
+
         .modal-content {
             background: white;
             padding: 3rem 2rem;
@@ -258,9 +277,14 @@
             text-align: center;
             box-shadow: 0 20px 40px rgba(0,0,0,0.3);
             transform: scale(0.9);
-            animation: scaleUp 0.3s forwards cubic-bezier(0.34, 1.56, 0.64, 1);
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
             border-top: 8px solid var(--impact-yellow);
         }
+        
+        .modal-active .modal-content {
+            transform: scale(1);
+        }
+
         .modal-content img {
             max-width: 180px;
             margin: 0 auto 1.5rem auto;
@@ -296,10 +320,6 @@
         .close-btn:hover {
             opacity: 0.9;
         }
-        
-        @keyframes scaleUp {
-            to { transform: scale(1); }
-        }
     </style>
 </head>
 <body>
@@ -324,7 +344,8 @@
     </div>
 
     <h2>Training Program Intake Form</h2>
-    <form id="intakeForm">
+    <!-- novalidate disables the clunky browser popups so our smooth animations can take over -->
+    <form id="intakeForm" novalidate>
         <div class="form-section">
             <div class="section-title">Personal Information</div>
             <label for="fullName">Full Name *</label>
@@ -431,8 +452,10 @@
     }
 
     // Modal Close Logic
+    const successModal = document.getElementById('successModal');
     document.getElementById('closeModalBtn').addEventListener('click', () => {
-        document.getElementById('successModal').style.display = 'none';
+        successModal.classList.remove('modal-active');
+        setTimeout(() => { successModal.style.display = 'none'; }, 300); // Wait for fade out
     });
 </script>
 
@@ -476,11 +499,36 @@
         const formData = new FormData(form);
         const rawData = Object.fromEntries(formData.entries());
 
-        // STRICT REQUIREMENT CHECK
-        if (!rawData.fullName || !rawData.phone || !rawData.email || !rawData.etsDate) {
+        // CUSTOM VALIDATION WITH SCROLL & SHAKE ANIMATION
+        const requiredFields = ['fullName', 'phone', 'email', 'etsDate'];
+        let hasError = false;
+        let firstErrorElement = null;
+
+        requiredFields.forEach(fieldId => {
+            const el = document.getElementById(fieldId);
+            el.classList.remove('input-error'); // Reset
+            
+            if (!el.value || el.value.trim() === '') {
+                void el.offsetWidth; // Triggers DOM reflow to restart the animation
+                el.classList.add('input-error');
+                hasError = true;
+                if (!firstErrorElement) firstErrorElement = el;
+            }
+        });
+
+        if (hasError) {
             statusMessage.style.color = "#d32f2f";
-            statusMessage.textContent = "Please fill out all required fields, including the ETS Date.";
-            return;
+            statusMessage.textContent = "Please fill out the highlighted required fields.";
+            
+            // Smoothly scroll the mobile view right to the missed field
+            firstErrorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            
+            // Give flatpickr/mobile UI a split second before forcing focus
+            setTimeout(() => {
+                firstErrorElement.focus({ preventScroll: true });
+            }, 300);
+            
+            return; // Stops submission
         }
 
         statusMessage.style.color = "var(--impact-grey)";
@@ -531,12 +579,14 @@
             tasks.push(newTask);
             await set(tasksRef, tasks);
             
-            // Clear status text, reset form, and display the Success Modal
+            // Reset form UI
             statusMessage.textContent = "";
             form.reset();
             document.getElementById('tradeSchoolContainer').style.display = 'none';
             
-            document.getElementById('successModal').style.display = 'flex';
+            // Trigger Success Modal completely independently 
+            successModal.style.display = 'flex';
+            setTimeout(() => { successModal.classList.add('modal-active'); }, 10);
             
         } catch (error) {
             console.error("Submission failed:", error);
