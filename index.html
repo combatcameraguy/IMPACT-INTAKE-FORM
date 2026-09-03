@@ -247,7 +247,7 @@
         </div>
     </div>
 
-    <h2>Training Program Intake Form UNDER MAINTENENCE 9/2/26</h2>
+    <h2>Training Program Intake Form</h2>
     <form id="intakeForm">
         <div class="form-section">
             <div class="section-title">Personal Information</div>
@@ -392,28 +392,35 @@
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
 
+        const formData = new FormData(form);
+        const rawData = Object.fromEntries(formData.entries());
+
+        // STRICT REQUIREMENT CHECK
+        if (!rawData.fullName || !rawData.phone || !rawData.email || !rawData.etsDate) {
+            statusMessage.style.color = "#d32f2f";
+            statusMessage.textContent = "Please fill out all required fields, including the ETS Date.";
+            return;
+        }
+
         statusMessage.style.color = "var(--impact-grey)";
         statusMessage.textContent = "Submitting...";
         submitBtn.textContent = "Processing...";
         submitBtn.disabled = true;
 
         try {
-            const formData = new FormData(form);
-            const rawData = Object.fromEntries(formData.entries());
-            
             const newTask = {
                 id: Date.now(), 
                 group: 'group1',
                 timestamp: new Date().toISOString().split('T')[0],
-                fullName: rawData.fullName || 'N/A',
-                phone: rawData.phone || 'N/A',
-                email: rawData.email || 'N/A',
+                fullName: rawData.fullName,
+                phone: rawData.phone,
+                email: rawData.email,
                 currentStatus: rawData.mStatus || 'N/A',
                 branchOfService: rawData.branch || 'Not started',
                 agreeToContact: rawData.consent ? 'Yes' : 'No',
                 mos: rawData.mos || 'N/A',
                 payGrade: rawData.payGrade || 'N/A',
-                etsDate: rawData.etsDate || 'N/A',
+                etsDate: rawData.etsDate,
                 terminalLeave: rawData.terminalLeave || 'N/A',
                 location: rawData.cityState || 'N/A',
                 transportation: rawData.transport || 'N/A',
@@ -432,7 +439,6 @@
             let rawTasks = snapshot.val();
             let tasks = [];
             
-            // Bulletproof array cleanup to handle objects, arrays, and null ghosts cleanly
             if (Array.isArray(rawTasks)) {
                 tasks = rawTasks.filter(t => t !== null && typeof t === 'object');
             } else if (rawTasks && typeof rawTasks === 'object') {
@@ -453,7 +459,6 @@
         } catch (error) {
             console.error("Submission failed:", error);
             statusMessage.style.color = "#d32f2f";
-            // Displays the exact Firebase error message on the screen
             statusMessage.textContent = "Error: " + error.message;
         } finally {
             submitBtn.disabled = false;
